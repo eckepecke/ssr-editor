@@ -27,20 +27,37 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post("/", async (req, res) => {
+app.get('/', async (req, res) => {
+    return res.render("index", { docs: await documents.getAll() });
+});
+
+app.get('/:id', async (req, res) => {
+    const doc = await documents.getOne(req.params.id);
+
+    if (!doc) {
+        // Render a "add" view if the document doesn't exist
+        return res.render("add", { doc: null, id: req.params.id });
+    }
+
+    return res.render("update", { doc });
+});
+
+app.get('/add', async (req, res) => {
+    return res.render("index", { docs: await documents.getAll() });
+});
+
+app.post("/add", async (req, res) => {
     const result = await documents.addOne(req.body);
 
     return res.redirect(`/${result.lastID}`);
 });
 
-app.get('/:id', async (req, res) => {
-    return res.render(
-        "doc",
-        { doc: await documents.getOne(req.params.id) }
-    );
-});
+app.post("/update", async (req, res) => {
 
-app.get('/', async (req, res) => {
+    // This is bad since it doesnt update on id but title
+    // Maybe we should add id to the table
+    const result = await documents.updateOne(req.body);
+
     return res.render("index", { docs: await documents.getAll() });
 });
 
