@@ -45,17 +45,17 @@ const docs = {
         }
     },
 
-    updateOne: async function updateOne(body) {
+    updateOne: async function updateOne(body, id) {
         let db = await openDb();
 
         try {
             return await db.run(
                 `UPDATE documents
                 SET title = ?, content = ?
-                WHERE title = ?`,
+                WHERE id = ?`,
                 body.title,
                 body.content,
-                body.title
+                body.id
             );
         } catch (e) {
             console.error(e);

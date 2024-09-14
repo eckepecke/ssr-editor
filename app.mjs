@@ -35,7 +35,7 @@ app.get('/:id', async (req, res) => {
     const doc = await documents.getOne(req.params.id);
 
     if (!doc) {
-        // Render a "add" view if the document doesn't exist
+        // Render "add" view if the document doesn't exist
         return res.render("add", { doc: null, id: req.params.id });
     }
 
@@ -52,10 +52,8 @@ app.post("/add", async (req, res) => {
     return res.redirect(`/${result.lastID}`);
 });
 
-app.post("/update", async (req, res) => {
+app.post("/update/:id", async (req, res) => {
 
-    // This is bad since it doesnt update on id but title
-    // Maybe we should add id to the table
     const result = await documents.updateOne(req.body);
 
     return res.render("index", { docs: await documents.getAll() });
