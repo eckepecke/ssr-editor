@@ -4,9 +4,11 @@ Starter project for DV1677 JSRamverk
 
 # Steps taken to make the application work
 
+1. Run npm init -y.
+1. Run npm install express.
 1. Initialize the database by running the migration scripts.
-2. Adjust view-template to account for when the database doesn't contain any documents.
-3. Also added id to database table for better update method.
+1. Adjust view-template to account for when the database doesn't contain any documents.
+1. Also added id to database table for better update method.
 
 # Choice of frontend framework
 
