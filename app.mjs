@@ -28,35 +28,26 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', async (req, res) => {
-    return res.render("index", { docs: await documents.getAll() });
+    const docs = await documents.getAll();
+    return res.json({ docs });
 });
 
 app.get('/:id', async (req, res) => {
     const doc = await documents.getOne(req.params.id);
-
     if (!doc) {
-        // Render "add" view if the document doesn't exist
-        return res.render("add", { doc: null, id: req.params.id });
+        return res.status(404).json({ error: "Document not found.", id: req.params.id });
     }
-
-    return res.render("update", { doc });
-});
-
-app.get('/add', async (req, res) => {
-    return res.render("index", { docs: await documents.getAll() });
+    return res.json({ doc });
 });
 
 app.post("/add", async (req, res) => {
     const result = await documents.addOne(req.body);
-
-    return res.redirect(`/${result.lastID}`);
+    return res.status(201).json({ success: true, docID: result.lastID });
 });
 
 app.post("/update/:id", async (req, res) => {
-
     const result = await documents.updateOne(req.body);
-
-    return res.render("index", { docs: await documents.getAll() });
+    return res.json({ success: true, updatedID: req.params.id });
 });
 
 app.listen(port, () => {
