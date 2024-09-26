@@ -2,19 +2,25 @@ import 'dotenv/config'
 
 const port = process.env.PORT || 8080;
 
-import express from 'express';
 import bodyParser from 'body-parser';
-import path from 'path';
-import morgan from 'morgan';
 import cors from 'cors';
+import express from 'express';
+import morgan from 'morgan';
+import path from 'path';
 
-import documents from "./docs.mjs";
+import './db/database.mjs'
+
+import gets from "./routes/gets.js"
+import index from "./routes/index.js"
+import posts from "./routes/posts.js"
 
 const app = express();
 
 app.disable('x-powered-by');
 
 app.set("view engine", "ejs");
+
+app.use(cors());
 
 app.use(express.static(path.join(process.cwd(), "public")));
 
@@ -27,27 +33,16 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', async (req, res) => {
-    const docs = await documents.getAll();
-    return res.json({ docs });
-});
+app.use('/', index);
+app.use('/hello', hello);
+app.use('/posts', posts);
+app.use('/gets', gets);
 
-app.get('/:id', async (req, res) => {
-    const doc = await documents.getOne(req.params.id);
-    if (!doc) {
-        return res.status(404).json({ error: "Document not found.", id: req.params.id });
-    }
-    return res.json({ doc });
-});
 
-app.post("/add", async (req, res) => {
-    const result = await documents.addOne(req.body);
-    return res.status(201).json({ success: true, docID: result.lastID });
-});
-
-app.post("/update/:id", async (req, res) => {
-    const result = await documents.updateOne(req.body);
-    return res.json({ success: true, updatedID: req.params.id });
+app.use((req,res, next) => {
+    var err = new Error("Not found");
+    err.status = 404;
+    next(err);
 });
 
 app.listen(port, () => {
