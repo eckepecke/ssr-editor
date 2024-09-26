@@ -17,20 +17,14 @@ const docs = {
     },
 
     addOne: async function addOne(body) {
-        let db = await database.getDb();
+        const { collection, client } = await database.getDb();
         console.log("add one triggered")
-    
-        try {
-            
-            // const result = await db.collection('documents').insertOne({
-            //     title: body.title,
-            //     content: body.content,
-            //     created_at: new Date()
-            // });
 
-            const result = await db.collection('documents').insertOne({
-                title: "test-title",
-                content: "test-content",
+
+        try {
+            const result = await collection.insertOne({
+                title: body.title,
+                content: body.content,
                 created_at: new Date()
             });
 
@@ -39,7 +33,7 @@ const docs = {
         } catch (e) {
             console.error(e);
         } finally {
-            await db.close();
+            await client.close();
         }
     },
 
