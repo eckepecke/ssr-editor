@@ -33,10 +33,14 @@ router.get('/add', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    const doc = await documents.getOne(req.params.id);
+    console.log("id route");
 
-    if (!doc) {
-        // Render "add" view if the document doesn't exist
+    const doc = await documents.getOne(req.params.id);
+    console.log(doc);
+
+
+    if (Array.isArray(doc) && doc.length === 0) {
+        // Render "add" view if the document is empty array
         return res.render("add", { doc: null, id: req.params.id });
     }
 
