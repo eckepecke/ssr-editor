@@ -34,7 +34,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', index);
-app.use('/hello', hello);
 app.use('/posts', posts);
 app.use('/gets', gets);
 
