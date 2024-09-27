@@ -34,8 +34,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', index);
-app.use('/posts', posts);
-app.use('/gets', gets);
+app.use('/post', posts);
+app.use('/get', gets);
 
 
 app.use((req,res, next) => {

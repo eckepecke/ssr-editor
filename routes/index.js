@@ -7,22 +7,22 @@ router.get('/', async (req, res) => {
         routes: {
             addDocument: {
                 method: "POST",
-                path: "/posts/add",
+                path: "/post/add",
                 description: "Add a new document."
             },
             updateDocument: {
                 method: "POST",
-                path: "posts/update/:id",
+                path: "post/update/:id",
                 description: "Update an existing document by its ID."
             },
             allDocuments: {
                 method: "GET",
-                path: "gets/all",
+                path: "get/all",
                 description: "Retrieve all documents."
             },
             getDocumentById: {
                 method: "GET",
-                path: "gets/:id",
+                path: "get/:id",
                 description: "Retrieve a document by its ID."
             }
         },

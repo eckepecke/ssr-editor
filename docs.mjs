@@ -1,4 +1,6 @@
 import database from './db/database.mjs'
+import { ObjectId } from 'mongodb';
+
 
 const docs = {
     getAll: async function getAll() {
@@ -22,6 +24,9 @@ const docs = {
 
 
         try {
+            // mongodb generates weird ids, how should we keep track of IDs now?
+            // Following guide could be usefule but implementation looks annoying
+            // https://www.mongodb.com/resources/products/platform/mongodb-auto-increment
             const result = await collection.insertOne({
                 title: body.title,
                 content: body.content,
@@ -37,11 +42,13 @@ const docs = {
         }
     },
 
-    getOne: async function getOne(id) {
+    getOne: async function getOne(idString) {
         let db = await database.getDb();
-
+        let id = parseInt(idString);
+        // have not managed to retrieve document because we dont have id anymore
+        
         try {
-            const doc = await db.collection('documents').findOne({ _id: new ObjectId(id) });
+            const doc = await db.collection.findOne({ _id: new ObjectId(id) });
             return doc;
         } catch (e) {
             console.error(e);
