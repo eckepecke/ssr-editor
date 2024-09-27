@@ -27,9 +27,12 @@ router.get('/all', async (req, res) => {
 });
 
 router.get('/add', async (req, res) => {
-    const doc = await documents.getOne(req.params.id);
+    // const doc = await documents.getOne(req.params.id);
+    const lastId = await documents.findHighestID();
+    console.log(lastId);
 
-    return res.render("add", { doc: null, id: req.params.id });
+
+    return res.render("add", { doc: null, id: lastId });
 });
 
 router.get('/:id', async (req, res) => {

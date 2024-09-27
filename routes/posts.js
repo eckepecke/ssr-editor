@@ -25,14 +25,14 @@ router.get('/', async (req, res) => {
 router.post("/add", async (req, res) => {
     console.log("ADD ROUTE");
     const result = await documents.addOne(req.body);
-    return res.status(201).json({ success: true, docID: result.lastID });
+    console.log(result);
+    return res.status(201).json({ success: true });
 });
 
 router.post("/update/:id", async (req, res) => {
 
     const result = await documents.updateOne(req.body);
-
-    return res.render("index", { docs: await documents.getAll() });
+    return res.status(201).json({ success: true });
 });
 
 
