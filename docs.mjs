@@ -28,6 +28,7 @@ const docs = {
             // Following guide could be usefule but implementation looks annoying
             // https://www.mongodb.com/resources/products/platform/mongodb-auto-increment
             const result = await collection.insertOne({
+                id: parseInt(body.id),
                 title: body.title,
                 content: body.content,
                 created_at: new Date()
@@ -74,6 +75,19 @@ const docs = {
             console.error(e);
         } finally {
             await db.close();
+        }
+    },
+
+    findHighestID: async function findHighestID() {
+        let db = await database.getDb();
+
+        try {
+            const doc = await db.collection.findOne({}, { sort: { id: -1 }, projection: { id: 1 } });
+            return doc ? doc.id : 0;
+        } catch (err) {
+            throw new Error('Error finding max id: ' + err.message);
+        } finally {
+            await db.client.close();
         }
     }
 };
