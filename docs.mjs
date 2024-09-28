@@ -43,10 +43,10 @@ const docs = {
         
         try {
             const doc = await db.collection.findOne({ id: id });
-            return doc;
+            return doc || [];
         } catch (e) {
             console.error(e);
-            return {};
+            return [];
         } finally {
             await db.client.close();
         }

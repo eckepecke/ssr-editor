@@ -4,10 +4,8 @@ import { MongoClient, ServerApiVersion } from 'mongodb';
 
 const database = {
     getDb: async function getDb () {
-        // console.log(process.env.DB_PASS);
 
-        let dsn = `mongodb+srv://erik:${process.env.DB_PASS}@ssr-editor.2t5qn.mongodb.net/myDatabase?retryWrites=true&w=majority&appName=ssr-editor`;
-
+        let dsn = `mongodb+srv://${process.env.ATLAS_USERNAME}:${process.env.ATLAS_PASSWORD}@ssr-editor.2t5qn.mongodb.net/myDatabase?retryWrites=true&w=majority&appName=ssr-editor`;
 
         if (process.env.NODE_ENV === 'test') {
             dsn = "mongodb://localhost:27017/test";
