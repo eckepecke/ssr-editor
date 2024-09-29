@@ -11,14 +11,27 @@ chai.should();
 
 describe('app', () => {
     describe('GET /', () => {
-        it('200 HAPPY PATH getting base', (done) => {
+        it('200 HAPPY PATH getting index page', (done) => {
             chai.request.execute(server)
                 .get("/")
                 .end((err, res) => {
                     res.should.have.status(200);
-
                     done();
                 });
         });
     });
 });
+
+describe('posts', () => {
+    describe('GET /post', () => {
+        it('200 HAPPY PATH getting post index page', (done) => {
+            chai.request.execute(server)
+                .get("/post")
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
+});
+

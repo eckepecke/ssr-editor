@@ -1,11 +1,11 @@
 import express from 'express';
-import documents from "../docs.mjs";
+import documents from "../models/docs.mjs";
 
 const router = express.Router();
 
 
 router.get('/', async (req, res) => {
-    return res.json({
+    return res.status(200).json({
         message: "These are all the current get routes",
         allDocuments: {
             method: "GET",

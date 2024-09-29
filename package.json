@@ -32,5 +32,19 @@
     "javascript-style-guide": "^1.0.1",
     "mocha": "^10.7.3",
     "nyc": "^17.1.0"
-  }
+  },
+    "nyc": {
+      "include": [
+        "app.mjs",
+        "database/**/*.js",
+        "models/**/*.js",
+        "routes/**/*.js"
+      ],
+      "exclude": [
+        "test/**/*.js"
+      ],
+      "reporter": ["text", "html"],
+      "all": true
+    }
+
 }

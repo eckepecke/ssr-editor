@@ -1,4 +1,4 @@
-import database from './db/database.mjs'
+import database from '../db/database.mjs'
 
 const docs = {
     getAll: async function getAll() {
