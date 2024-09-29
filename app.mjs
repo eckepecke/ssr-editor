@@ -1,3 +1,5 @@
+// TODO: Update app.mjs and docs.mjs to use MongoDB logic instead of SQLite logic.
+
 import 'dotenv/config'
 
 const port = process.env.PORT || 8080;

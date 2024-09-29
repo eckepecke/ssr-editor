@@ -1,18 +1,26 @@
-import sqlite3 from 'sqlite3';
-import { open } from 'sqlite';
+import { MongoClient } from 'mongodb';
 
-async function openDb() {
-    let dbFilename = `./db/docs.sqlite`;
+let dsn = `mongodb+srv://${process.env.ATLAS_USERNAME}:${process.env.ATLAS_PASSWORD}@jsramverk.cqacp.mongodb.net/?retryWrites=true&w=majority&appName=jsramverk`;
 
-    if (process.env.NODE_ENV === 'test') {
-        dbFilename = "./db/test.sqlite";
+let db = null;
+
+const connectDb = async () => {
+    if (db) return db;
+
+    const client = new MongoClient(dsn, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+
+    try {
+        await client.connect();
+        db = client.db();
+        console.log("Connected to MongoDB");
+    } catch (err) {
+        console.error("Error connecting to MongoDB:", err);
     }
 
-    return await open({
-        filename: dbFilename,
-        driver: sqlite3.Database
-    });
-}
+    return db;
+};
 
-
-export default openDb;
+export default connectDb;
