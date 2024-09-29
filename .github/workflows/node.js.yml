@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["master"]
   pull_request:
-    branches: ["main"]
+    branches: ["master"]
 
 env:
   JWT_SECRET: "DUMMYSECRETFORTESTINGJWT12345678"
