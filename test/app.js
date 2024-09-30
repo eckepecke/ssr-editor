@@ -1,18 +1,26 @@
-process.env.NODE_ENV = 'test';
-
-// Require the dev-dependencies
-import {use} from 'chai';
+import * as chai from 'chai';
+// import chaiHttp from 'chai-http';
 import chaiHttp from 'chai-http/index.js';
 import server from '../app.mjs';
-import HTMLParser from 'node-html-parser';
 
-const chai = use(chaiHttp);
-chai.should();
+chai.use(chaiHttp);
+
+// const { expect } = chai;
+
+// describe('database', () => {
+//     describe('GET /get/all', () => {
+//         it('should return 200 status and the correct data', async () => {
+//             const res = await chai.request(server).get("/get/all");
+//             // expect(res).to.have.status(200);
+
+//         });
+//     });
+// });
 
 describe('app', () => {
     describe('GET /', () => {
         it('200 HAPPY PATH getting index page', (done) => {
-            chai.request.execute(server)
+            chai.request(server)
                 .get("/")
                 .end((err, res) => {
                     res.should.have.status(200);
