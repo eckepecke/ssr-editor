@@ -21,9 +21,13 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/all', async (req, res) => {
-    return res.json({
-        data: await documents.getAll()
-    });
+    try {
+        const data = await documents.getAll();
+        return res.status(200).json({ data });
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
 });
 
 router.get('/add', async (req, res) => {

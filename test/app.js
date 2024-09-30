@@ -22,16 +22,20 @@ describe('app', () => {
     });
 });
 
-describe('posts', () => {
-    describe('GET /post', () => {
-        it('200 HAPPY PATH getting post index page', (done) => {
+describe('database', () => {
+    describe('GET /get/all', () => {
+        it('Testing that database returns 200 status', (done) => {
             chai.request.execute(server)
-                .get("/post")
+                .get("/get/all")
                 .end((err, res) => {
                     res.should.have.status(200);
+
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('data');
+                    res.body.data.should.be.a('array');
+
                     done();
                 });
         });
     });
 });
-

@@ -5,7 +5,8 @@ const docs = {
         let db = await database.getDb();
 
         try {
-            console.log(db);
+            console.log("trying");
+            // console.log(db);
             return await db.collection.find().toArray();
         } catch (e) {
             console.error(e);
