@@ -37,8 +37,8 @@
   "nyc": {
     "include": [
       "app.mjs",
-      "database/**/*.js",
-      "models/**/*.js",
+      "database/**/*.mjs",
+      "models/**/*.mjs",
       "routes/**/*.js"
     ],
     "exclude": [
