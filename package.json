@@ -7,7 +7,8 @@
     "test": "nyc --reporter=html --reporter=text --reporter=clover mocha --timeout 20000",
     "start": "node app.mjs",
     "production": "NODE_ENV='production' node app.mjs",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "clean": "rm -rf node_modules package-lock.json"
   },
   "keywords": [],
   "author": "",

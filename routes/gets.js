@@ -23,35 +23,43 @@ router.get('/', async (req, res) => {
 router.get('/all', async (req, res) => {
     try {
         const data = await documents.getAll();
-        return res.status(200).json({ data });
+        return res.status(200).json({ data: data });
     } catch (error) {
         console.error('Error fetching data:', error);
-        return res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(500).json({ success: false });
     }
 });
 
 router.get('/add', async (req, res) => {
-    // const doc = await documents.getOne(req.params.id);
-    const lastId = await documents.findHighestID();
-    console.log(lastId);
-
-
-    return res.render("add", { doc: null, id: lastId });
+    try {
+        // lastId to be used when adding new document
+        const lastId = await documents.findHighestID();
+        console.log(lastId);
+        return res.status(200).json({ lastId });
+    } catch (e) {
+        console.error('Error fetching last id:', error)
+        return res.status(500).json({ success: false });
+    }
 });
 
 router.get('/:id', async (req, res) => {
-    console.log("id route");
+    try {
+        const doc = await documents.getOne(req.params.id);
 
-    const doc = await documents.getOne(req.params.id);
-    console.log(doc);
-
-
-    if (Array.isArray(doc) && doc.length === 0) {
-        // Render "add" view if the document is empty array
-        return res.render("add", { doc: null, id: req.params.id });
+        if (!doc || (Array.isArray(doc) && doc.length === 0)) {
+            // this used to be render add
+            return res.status(404).json({ message: `Doc with id:${req.params.id} does not exist` });
+        } else {
+            console.log("How do I get here also?")
+            // this used to be render update
+            return res.status(200).json({ doc: doc, id: req.params.id });
+        }
+    } catch(e) {
+        console.error(`Something went wrong looking for id:${req.params.id} `, error)
+        return res.status(500).json({ success: false });
     }
 
-    return res.render("update", { doc });
+
 });
 
 export default router;

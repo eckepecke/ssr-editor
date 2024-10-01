@@ -22,13 +22,24 @@ router.get('/', async (req, res) => {
 });
 
 router.post("/add", async (req, res) => {
-    const result = await documents.addOne(req.body);
-    return res.status(201).json({ success: true });
+    try {
+        const result = await documents.addOne(req.body);
+        console.log(result);
+        return res.status(201).json({ success: true });
+    } catch(e) {
+        console.error(e)
+        return res.status(500).json({ success: false, message: "Something went wrong adding document" });
+    }
 });
 
 router.post("/update/:id", async (req, res) => {
-    const result = await documents.updateOne(req.body);
-    return res.status(201).json({ success: true });
+    try {
+        const result = await documents.updateOne(req.body);
+        return res.status(201).json({ success: true });
+    } catch (e) {
+        console.error(e)
+        return res.status(500).json({ success: false, message: "Something went wrong updating document" });
+    }
 });
 
 
