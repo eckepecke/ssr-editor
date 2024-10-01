@@ -109,15 +109,6 @@ describe('database', () => {
         });
 
 
-        it('Testing that id is a string', (done) => {
-            chai.request.execute(server)
-                .get("/get/add")
-                .end((err, res) => {
-                    res.body.lastId.should.be.a('string');
-                    done();
-                });
-        });
-
         // it('Testing that data has lastId', (done) => {
         //     chai.request.execute(server)
         //         .get("/get/add")

@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -123,7 +123,12 @@
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -169,17 +174,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -211,7 +221,7 @@ const router = <span class="cstat-no" title="statement not covered" >express.Rou
 <span class="cstat-no" title="statement not covered" >        return res.status(200).json({ data: data });</span>
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >        console.error('Error fetching data:', error);</span>
-<span class="cstat-no" title="statement not covered" >        return res.status(500).json({ message: 'Internal Server Error' });</span>
+<span class="cstat-no" title="statement not covered" >        return res.status(500).json({ success: false });</span>
     }
 });
 &nbsp;
@@ -223,23 +233,28 @@ const router = <span class="cstat-no" title="statement not covered" >express.Rou
 <span class="cstat-no" title="statement not covered" >        return res.status(200).json({ lastId });</span>
     } catch (e) {
 <span class="cstat-no" title="statement not covered" >        console.error('Error fetching last id:', error)</span>
-<span class="cstat-no" title="statement not covered" >        return res.status(500).json({ message: 'Internal Server Error' });</span>
+<span class="cstat-no" title="statement not covered" >        return res.status(500).json({ success: false });</span>
     }
 });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >router.get('/:id', <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    console.log("id route");</span>
+<span class="cstat-no" title="statement not covered" >    try {</span>
+        const doc = <span class="cstat-no" title="statement not covered" >await documents.getOne(req.params.id);</span>
 &nbsp;
-    const doc = <span class="cstat-no" title="statement not covered" >await documents.getOne(req.params.id);</span>
-<span class="cstat-no" title="statement not covered" >    console.log(doc);</span>
-&nbsp;
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (Array.isArray(doc) &amp;&amp; doc.length === 0) {</span>
-        // Render "add" view if the document is empty array
-<span class="cstat-no" title="statement not covered" >        return res.render("add", { doc: null, id: req.params.id });</span>
+<span class="cstat-no" title="statement not covered" >        if (!doc || (Array.isArray(doc) &amp;&amp; doc.length === 0)) {</span>
+            // this used to be render add
+<span class="cstat-no" title="statement not covered" >            return res.status(404).json({ message: `Doc with id:${req.params.id} does not exist` });</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >            console.log("How do I get here also?")</span>
+            // this used to be render update
+<span class="cstat-no" title="statement not covered" >            return res.status(200).json({ doc: doc, id: req.params.id });</span>
+        }
+    } catch(e) {
+<span class="cstat-no" title="statement not covered" >        console.error(`Something went wrong looking for id:${req.params.id} `, error)</span>
+<span class="cstat-no" title="statement not covered" >        return res.status(500).json({ success: false });</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return res.render("update", { doc });</span>
+&nbsp;
 });
 &nbsp;
 export default router;
@@ -250,7 +265,7 @@ export default router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-01T06:46:36.206Z
+                at 2024-10-01T07:46:21.803Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
