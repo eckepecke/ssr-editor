@@ -22,7 +22,11 @@ app.set("view engine", "ejs");
 
 app.use(cors());
 
-app.use(express.static(path.join(process.cwd(), "public")));
+// app.use(express.static(path.join(process.cwd(), "public")));
+// app.use(express.static(path.join(process.cwd(), "frontend")));
+app.use(express.static(path.join(process.cwd(), 'frontend', 'build')));
+
+
 
 // don't show the log when it is test
 if (process.env.NODE_ENV !== 'test') {
