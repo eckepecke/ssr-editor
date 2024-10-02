@@ -26,8 +26,12 @@ process.env.NODE_ENV = "test"
 
 // efo test
 import * as chaiModule from "chai";
-import chaiHttp from "chai-http";
+import chaiHttp from "chai-http/index.js";
 import server from "../app.mjs";
+import database from "../db/database.mjs";
+const collectionName = "documents";
+
+
 
 const chai = chaiModule.use(chaiHttp);
 
@@ -64,6 +68,25 @@ describe('app', () => {
 });
 
 describe('database', () => {
+    before(async () => {
+        const db = await database.getDb();
+        console.log(db.client);
+
+        db.db.listCollections({ name: collectionName })
+            .next()
+            .then(async function(info) {
+                if (info) {
+                    await db.collection.drop();
+                }
+            })
+            .catch(function(err) {
+                console.error(err);
+            })
+            .finally(async function() {
+                await db.client.close();
+            });
+    });
+
     describe('GET /get/all', () => {
         it('should return 200 status', (done) => {
             chai.request.execute(server)
@@ -104,7 +127,7 @@ describe('database', () => {
     
 
     describe('GET /get/add', () => {
-        it('Testing that database returns 200 status', (done) => {
+        it('200 HAPPY PATH getting get/add', (done) => {
             chai.request.execute(server)
                 .get("/get/add")
                 .end((err, res) => {
@@ -131,15 +154,21 @@ describe('database', () => {
                     done();
                 });
         });
-
-
-        // it('Testing that data has lastId', (done) => {
-        //     chai.request.execute(server)
-        //         .get("/get/add")
-        //         .end((err, res) => {
-        //             res.body.data.should.have.property('lastId');
-        //             done();
-        //         });
-        // });
     });
-});
+
+    // describe('POST /post/add', () => {
+    //     it('Testing post/add returns 500 posting invalid data', (done) => {
+    //         let doc = {
+    //             title: "test",
+    //             // content: "no content",
+    //             // id: 1
+    //         };
+    //         chai.request.execute(server)
+    //             .post("/post/add")
+    //             .end((err, res) => {
+    //                 res.should.have.status(500);
+    //                 done();
+    //             });
+    //     });
+    // });
+})
