@@ -1,6 +1,6 @@
 process.env.NODE_ENV = "test"
 //////////////////////////////////////////
-// this setup doesnt work at all
+// this setup doesn't work at all
 
 // import * as chai from 'chai';
 // // import chaiHttp from 'chai-http';
