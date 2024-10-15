@@ -13,8 +13,11 @@ import './db/database.mjs'
 import gets from "./routes/gets.js"
 import index from "./routes/index.js"
 import posts from "./routes/posts.js"
+import auth from "./routes/auth.js";
 
 const app = express();
+import authModel from "./models/auth.js";
+
 
 app.disable('x-powered-by');
 
@@ -37,9 +40,13 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// app.all('*', authModel.checkAPIKey);
+
 app.use('/', index);
 app.use('/post', posts);
 app.use('/get', gets);
+app.use('/auth', auth);
+
 
 
 app.use((req,res, next) => {

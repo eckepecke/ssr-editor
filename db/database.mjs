@@ -22,7 +22,7 @@ const database = {
         });
 
         const db = await client.db();
-        const collection = await db.collection("documents");
+        const collection = await db.collection("users");
 
         return {
             collection: collection,
