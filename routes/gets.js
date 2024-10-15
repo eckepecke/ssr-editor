@@ -1,5 +1,7 @@
 import express from 'express';
 import documents from "../models/docs.mjs";
+import auth from "../models/auth.js";
+
 
 const router = express.Router();
 
@@ -30,6 +32,13 @@ router.get('/all', async (req, res) => {
     }
 });
 
+
+// router.get('/all', async (req, res) => {
+//     (req, res, next) => auth.checkToken(req, res, next),
+//     (req, res) => data.getAllDataForUser(res, req)
+// });
+
+
 router.get('/add', async (req, res) => {
     try {
         // lastId to be used when adding new document
@@ -42,24 +51,39 @@ router.get('/add', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
+// router.get('/:id', async (req, res) => {
+//     try {
+//         const doc = await documents.getOne(req.params.id);
+
+//         if (!doc || (Array.isArray(doc) && doc.length === 0)) {
+//             // this used to be render add
+//             return res.status(404).json({ message: `Doc with id:${req.params.id} does not exist` });
+//         } else {
+//             console.log("How do I get here also?")
+//             // this used to be render update
+//             return res.status(200).json({ doc: doc, id: req.params.id });
+//         }
+//     } catch(e) {
+//         console.error(`Something went wrong looking for id:${req.params.id} `, error)
+//         return res.status(500).json({ success: false });
+//     }
+// });
+
+router.get('/:id', auth.checkToken, async (req, res) => {
+
     try {
+
         const doc = await documents.getOne(req.params.id);
 
         if (!doc || (Array.isArray(doc) && doc.length === 0)) {
-            // this used to be render add
             return res.status(404).json({ message: `Doc with id:${req.params.id} does not exist` });
         } else {
-            console.log("How do I get here also?")
-            // this used to be render update
             return res.status(200).json({ doc: doc, id: req.params.id });
         }
     } catch(e) {
         console.error(`Something went wrong looking for id:${req.params.id} `, error)
         return res.status(500).json({ success: false });
     }
-
-
 });
 
 export default router;

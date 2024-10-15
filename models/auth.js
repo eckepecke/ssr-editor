@@ -8,14 +8,14 @@ import jwt from 'jsonwebtoken';
 const jwtSecret = process.env.JWT_SECRET;
 
 const auth = {
+    token: "",
+    user: "",
 
     login: async function(res, body) {
         const email = body.email;
         const password = body.password;
-        const apiKey = body.api_key;
         console.log("body in auth.login:")
         console.log(body);
-
 
         if (!email || !password) {
             return res.status(401).json({
@@ -33,19 +33,14 @@ const auth = {
         try {
             db = await database.getDb();
 
-            const filter = { key: apiKey, users: {
-                $elemMatch: {
-                    email: email
-                }
-            } };
-
-            const user = await db.collection.findOne(filter);
+            const user = await db.collection.findOne({ email: email });
+            console.log(user);
 
             if (user) {
                 return auth.comparePasswords(
                     res,
                     password,
-                    user.users[0],
+                    user,
                 );
             } else {
                 return res.status(401).json({
@@ -85,8 +80,10 @@ const auth = {
             }
 
             if (result) {
-                let payload = { api_key: user.apiKey, email: user.email };
+                let payload = { email: user.email };
                 let jwtToken = jwt.sign(payload, jwtSecret, { expiresIn: '24h' });
+                this.token = jwtToken;
+                this.user = user.email;
 
                 return res.json({
                     data: {
@@ -198,40 +195,43 @@ const auth = {
         });
     },
 
-    // checkToken: function(req, res, next) {
-    //     let token = req.headers['x-access-token'];
-    //     let apiKey = req.query.api_key || req.body.api_key;
+    checkToken: function(req, res, next) {
+        console.log(`Check token: ${auth.token}`)
+        console.log(`Check user: ${auth.user}`)
 
-    //     if (token) {
-    //         jwt.verify(token, jwtSecret, function(err, decoded) {
-    //             if (err) {
-    //                 return res.status(500).json({
-    //                     errors: {
-    //                         status: 500,
-    //                         source: req.path,
-    //                         title: "Failed authentication",
-    //                         detail: err.message
-    //                     }
-    //                 });
-    //             }
+        const token = auth.token;
 
-    //             req.user = {};
-    //             req.user.api_key = apiKey;
-    //             req.user.email = decoded.email;
+        if (token === "") {
+            return res.status(401).json({
+                errors: {
+                    status: 401,
+                    source: req.path,
+                    title: "No token",
+                    detail: "No token provided in request headers"
+                }
+            });
+        } 
 
-    //             return next();
-    //         });
-    //     } else {
-    //         return res.status(401).json({
-    //             errors: {
-    //                 status: 401,
-    //                 source: req.path,
-    //                 title: "No token",
-    //                 detail: "No token provided in request headers"
-    //             }
-    //         });
-    //     }
-    // }
+        jwt.verify(token, jwtSecret, function(err, decoded) {
+            if (err) {
+                return res.status(500).json({
+                    errors: {
+                        status: 500,
+                        source: req.path,
+                        title: "Failed authentication",
+                        detail: err.message
+                    }
+                });
+            }
+
+            // req.user = {};
+            // req.user.api_key = apiKey;
+            // req.user.email = decoded.email;
+
+            return next();
+        });
+
+    }
 };
 
 export default auth;
