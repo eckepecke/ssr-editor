@@ -15,15 +15,39 @@ process.env.NODE_ENV = "test"
 /////////////////////////////////////////////
 // This setup works with .execute but only when there is a single file in test folder
 
-import {use} from 'chai';
-import chaiHttp from 'chai-http/index.js';
-import server from '../app.mjs';
-import HTMLParser from 'node-html-parser';
+// import {use} from 'chai';
+// import chaiHttp from 'chai-http/index.js';
+// import server from '../app.mjs';
+// import HTMLParser from 'node-html-parser';
 
-const chai = use(chaiHttp);
-chai.should();
+// const chai = use(chaiHttp);
+// chai.should();
 /////////////////////////////////////////////
 
+// efo test
+import * as chaiModule from "chai";
+import chaiHttp from "chai-http";
+import server from "../app.mjs";
+
+const chai = chaiModule.use(chaiHttp);
+
+chai.should();
+
+// describe('Reports', () => {
+//     describe('GET /test', () => {
+//         it('200 HAPPY PATH', (done) => {
+//             chai.request.execute(server)
+//                 .get("/test")
+//                 .end((err, res) => {
+//                     res.should.have.status(200);
+//                     res.body.should.be.an("object");
+
+//                     done();
+//                 });
+//         });
+//     });
+// });
+////////////////////////////
 
 
 describe('app', () => {

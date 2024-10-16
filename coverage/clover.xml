@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1727818628016" clover="3.2.0">
-  <project timestamp="1727818628016" name="All files">
-    <metrics statements="100" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="15" coveredmethods="0" elements="128" coveredelements="0" complexity="0" loc="100" ncloc="100" packages="3" files="5" classes="5"/>
-    <package name="ssr-editor">
+<coverage generated="1727787752591" clover="3.2.0">
+  <project timestamp="1727787752591" name="All files">
+    <metrics statements="62" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="10" coveredmethods="0" elements="81" coveredelements="0" complexity="0" loc="62" ncloc="62" packages="2" files="4" classes="4"/>
+    <package name="ssr-editor-0.1">
       <metrics statements="18" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
       <file name="app.mjs" path="C:\Users\willi\Desktop\bth\jsramverk\ssr-editor\app.mjs">
         <metrics statements="18" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -26,9 +26,9 @@
         <line num="47" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="ssr-editor.models">
+    <package name="ssr-editor-0.1.models">
       <metrics statements="38" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
-      <file name="docs.mjs" path="C:\Users\willi\Desktop\bth\jsramverk\ssr-editor\models\docs.mjs">
+      <file name="docs.mjs" path="/Users/erik/dbwebb-kurser/jsramverk/ssr-editor-0.1/models/docs.mjs">
         <metrics statements="38" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
@@ -70,7 +70,7 @@
         <line num="84" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="ssr-editor.routes">
+    <package name="ssr-editor-0.1.routes">
       <metrics statements="44" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="8" coveredmethods="0"/>
       <file name="gets.js" path="C:\Users\willi\Desktop\bth\jsramverk\ssr-editor\routes\gets.js">
         <metrics statements="25" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="4" coveredmethods="0"/>
