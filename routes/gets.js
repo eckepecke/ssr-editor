@@ -23,8 +23,10 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/all', async (req, res) => {
+    const user = auth.getCurrentUser();
+
     try {
-        const data = await documents.getAll();
+        const data = await documents.getAll(user);
         return res.status(200).json({ data: data });
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -32,48 +34,29 @@ router.get('/all', async (req, res) => {
     }
 });
 
-
-// router.get('/all', async (req, res) => {
-//     (req, res, next) => auth.checkToken(req, res, next),
-//     (req, res) => data.getAllDataForUser(res, req)
-// });
-
-
 router.get('/add', async (req, res) => {
+    const user = auth.getCurrentUser();
+    console.log(`Current user is: ${user}`);
     try {
-        // lastId to be used when adding new document
-        const lastId = await documents.findHighestID();
+        const lastId = await documents.findHighestID(user);
         console.log(lastId);
+
+
         return res.status(200).json({ lastId });
-    } catch (e) {
+    } catch (error) {
         console.error('Error fetching last id:', error)
         return res.status(500).json({ success: false });
     }
 });
 
-// router.get('/:id', async (req, res) => {
-//     try {
-//         const doc = await documents.getOne(req.params.id);
-
-//         if (!doc || (Array.isArray(doc) && doc.length === 0)) {
-//             // this used to be render add
-//             return res.status(404).json({ message: `Doc with id:${req.params.id} does not exist` });
-//         } else {
-//             console.log("How do I get here also?")
-//             // this used to be render update
-//             return res.status(200).json({ doc: doc, id: req.params.id });
-//         }
-//     } catch(e) {
-//         console.error(`Something went wrong looking for id:${req.params.id} `, error)
-//         return res.status(500).json({ success: false });
-//     }
-// });
-
 router.get('/:id', auth.checkToken, async (req, res) => {
+    const user = auth.getCurrentUser();
+    console.log(`Current user is: ${user}`);
+    console.log(`ID: ${req.params.id}`);
 
     try {
 
-        const doc = await documents.getOne(req.params.id);
+        const doc = await documents.getOne(req.params.id, user);
 
         if (!doc || (Array.isArray(doc) && doc.length === 0)) {
             return res.status(404).json({ message: `Doc with id:${req.params.id} does not exist` });

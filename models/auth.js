@@ -11,11 +11,13 @@ const auth = {
     token: "",
     user: "",
 
+    getCurrentUser: function getCurrentUser() {
+        return auth.user;
+    },
+
     login: async function(res, body) {
         const email = body.email;
         const password = body.password;
-        console.log("body in auth.login:")
-        console.log(body);
 
         if (!email || !password) {
             return res.status(401).json({
@@ -110,9 +112,6 @@ const auth = {
         const email = body.email;
         const password = body.password;
 
-        console.log(`Email: ${email}`)
-        console.log(`Password: ${password}`)
-
         if (!email || !password) {
             return res.status(401).json({
                 errors: {
@@ -125,7 +124,6 @@ const auth = {
         }
 
         bcrypt.hash(password, 10, async function(err, hash) {
-            console.log("hej1");
             if (err) {
                 return res.status(500).json({
                     errors: {
@@ -137,15 +135,9 @@ const auth = {
                 });
             }
 
-            console.log("hej2");
-
             let db;
 
-
-
             try {
-                console.log("hej3");
-
                 db = await database.getDb();
 
                 const existingUser = await db.collection.findOne({ email: email });
@@ -163,10 +155,9 @@ const auth = {
                 await db.collection.insertOne({
                     email: email,
                     password: hash,
+                    allowed_users: [],
                     docs: []
                 });
-
-                console.log("hej4");
 
                 return res.status(201).json({
                     data: {
@@ -174,11 +165,7 @@ const auth = {
                     }
                 });
 
-                console.log("hej5");
-
             } catch (e) {
-                console.log("hej6");
-
                 return res.status(500).json({
                     errors: {
                         status: 500,
@@ -188,8 +175,6 @@ const auth = {
                     }
                 });
             } finally {
-                console.log("hej7");
-
                 await db.client.close();
             }
         });
@@ -223,10 +208,6 @@ const auth = {
                     }
                 });
             }
-
-            // req.user = {};
-            // req.user.api_key = apiKey;
-            // req.user.email = decoded.email;
 
             return next();
         });

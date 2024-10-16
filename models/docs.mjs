@@ -1,32 +1,47 @@
 import database from '../db/database.mjs'
 
 const docs = {
-    getAll: async function getAll() {
+    getAll: async function getAll(user) {
         let db = await database.getDb();
 
         try {
-            console.log("trying");
-            // console.log(db);
-            return await db.collection.find().toArray();
-        } catch (e) {
-            console.error(e);
+            console.log("Trying to fetch documents for user:", user);
 
+            const result = await db.collection.findOne({ email: user });
+
+            console.log(result);
+
+            if (result && result.docs) {
+                return result.docs;
+            } else {
+                return [];
+            }
+        } catch (error) {
+            console.error(e);
             return [];
         } finally {
             await db.client.close()
         }
     },
 
-    addOne: async function addOne(body) {
+    addOne: async function addOne(body, user) {
         const { collection, client } = await database.getDb();
 
         try {
-            const result = await collection.insertOne({
-                id: parseInt(body.id),
-                title: body.title,
-                content: body.content,
-                created_at: new Date()
-            });
+            const result = await collection.updateOne(
+                { email: user },
+                { 
+                  $push: {
+                    docs: {
+                      id: parseInt(body.id),
+                      title: body.title,
+                      content: body.content,
+                      allowed_users: [user],
+                      created_at: new Date()
+                    }
+                  }
+                }
+              );
 
             console.log(result);
             return result;
@@ -37,14 +52,21 @@ const docs = {
         }
     },
 
-    getOne: async function getOne(idString) {
+    getOne: async function getOne(idString, user) {
         let db = await database.getDb();
-        let id = parseInt(idString);
+        let idToFind = parseInt(idString);
 
-        
         try {
-            const doc = await db.collection.findOne({ id: id });
-            return doc || [];
+            const result = await db.collection.findOne({ email: user });
+            const docArray = result.docs;
+
+            for (const doc of docArray) {
+                if (doc.id === idToFind) {
+                    return doc
+                } 
+            }
+
+            return [];
         } catch (e) {
             console.error(e);
             return [];
@@ -72,12 +94,28 @@ const docs = {
         }
     },
 
-    findHighestID: async function findHighestID() {
+    findHighestID: async function findHighestID(user) {
         let db = await database.getDb();
 
         try {
-            const doc = await db.collection.findOne({}, { sort: { id: -1 }, projection: { id: 1 } });
-            return doc ? doc.id : 0;
+            const result = await db.collection.findOne({ email: user });
+            const docArray = result.docs;
+
+            console.log(result);
+            console.log(docArray);
+
+            let highestId = 0;
+
+            for (const doc of docArray) {
+                if (doc.id > highestId) {
+                    highestId = doc.id;
+                } 
+            }
+
+            console.log("checking output")
+            console.log(highestId);
+  
+            return highestId;
         } catch (err) {
             throw new Error('Error finding max id: ' + err.message);
         } finally {

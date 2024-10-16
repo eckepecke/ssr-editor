@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -111,7 +111,18 @@
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -127,7 +138,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -135,20 +149,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -174,8 +196,11 @@ import './db/database.mjs'
 import gets from "./routes/gets.js"
 import index from "./routes/index.js"
 import posts from "./routes/posts.js"
+import auth from "./routes/auth.js";
 &nbsp;
 const app = <span class="cstat-no" title="statement not covered" >express();</span>
+import authModel from "./models/auth.js";
+&nbsp;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >app.disable('x-powered-by');</span>
 &nbsp;
@@ -183,7 +208,11 @@ const app = <span class="cstat-no" title="statement not covered" >express();</sp
 &nbsp;
 <span class="cstat-no" title="statement not covered" >app.use(cors());</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >app.use(express.static(path.join(process.cwd(), "public")));</span>
+// app.use(express.static(path.join(process.cwd(), "public")));
+// app.use(express.static(path.join(process.cwd(), "frontend")));
+<span class="cstat-no" title="statement not covered" >app.use(express.static(path.join(process.cwd(), 'frontend', 'build')));</span>
+&nbsp;
+&nbsp;
 &nbsp;
 // don't show the log when it is test
 <span class="cstat-no" title="statement not covered" >if (process.env.NODE_ENV !== 'test') {</span>
@@ -194,9 +223,13 @@ const app = <span class="cstat-no" title="statement not covered" >express();</sp
 <span class="cstat-no" title="statement not covered" >app.use(bodyParser.json());</span>
 <span class="cstat-no" title="statement not covered" >app.use(bodyParser.urlencoded({ extended: true }));</span>
 &nbsp;
+// app.all('*', authModel.checkAPIKey);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >app.use('/', index);</span>
 <span class="cstat-no" title="statement not covered" >app.use('/post', posts);</span>
 <span class="cstat-no" title="statement not covered" >app.use('/get', gets);</span>
+<span class="cstat-no" title="statement not covered" >app.use('/auth', auth);</span>
+&nbsp;
 &nbsp;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >app.use(<span class="fstat-no" title="function not covered" >(r</span>eq,res, next) =&gt; {</span>
@@ -214,7 +247,7 @@ export default server;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-02T00:57:20.363Z
+                at 2024-10-16T01:46:40.485Z
             </div>
         <script src="../prettify.js"></script>
         <script>
