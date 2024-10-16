@@ -124,8 +124,7 @@
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -155,15 +154,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -175,7 +167,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -183,6 +174,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -211,21 +209,14 @@ const router = <span class="cstat-no" title="statement not covered" >express.Rou
     });
 });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >router.post("/add", <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >router.post("/add", auth.checkToken, <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {</span>
     const user = <span class="cstat-no" title="statement not covered" >auth.getCurrentUser();</span>
 <span class="cstat-no" title="statement not covered" >    console.log(`we are in post add`);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    console.log(`Current user is: ${user}`);</span>
-    // const testbody = {
-    //     title: "test-title",
-    //     content: "test-content",
-    //     id: 1,
-    //     allowed_users: [user]
-    // }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
         const result = <span class="cstat-no" title="statement not covered" >await documents.addOne(req.body, user);</span>
-        // const result = await documents.addOne(testbody, user);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        console.log(result);</span>
 <span class="cstat-no" title="statement not covered" >        return res.status(201).json({ success: true });</span>
@@ -235,16 +226,22 @@ const router = <span class="cstat-no" title="statement not covered" >express.Rou
     }
 });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >router.post("/update/:id", <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >router.post("/update/:id", auth.checkToken, <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-&nbsp;
         const user = <span class="cstat-no" title="statement not covered" >auth.getCurrentUser();</span>
 <span class="cstat-no" title="statement not covered" >        console.log(`Current user is: ${user}`);</span>
         const result = <span class="cstat-no" title="statement not covered" >await documents.updateOne(req.body, user);</span>
 <span class="cstat-no" title="statement not covered" >        return res.status(201).json({ success: true });</span>
-    } catch (e) {
-<span class="cstat-no" title="statement not covered" >        console.error(e)</span>
-<span class="cstat-no" title="statement not covered" >        return res.status(500).json({ success: false, message: "Something went wrong updating document" });</span>
+    } catch (error) {
+<span class="cstat-no" title="statement not covered" >        console.error(error);</span>
+<span class="cstat-no" title="statement not covered" >        res.status(500).json({</span>
+            errors: {
+                status: 500,
+                source: req.path,
+                title: "Internal Server Error",
+                detail: error.message
+            }
+        });
     }
 });
 &nbsp;
@@ -256,7 +253,7 @@ export default router;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-16T01:46:40.485Z
+                at 2024-10-16T03:06:28.672Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
