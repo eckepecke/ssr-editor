@@ -39,11 +39,31 @@ router.post("/add", auth.checkToken, async (req, res) => {
     }
 });
 
-router.post("/update/:id", auth.checkToken, async (req, res) => {
+router.post("/update/doc", auth.checkToken, async (req, res) => {
     try {
         const user = auth.getCurrentUser();
         console.log(`Current user is: ${user}`);
         const result = await documents.updateOne(req.body, user);
+        return res.status(201).json({ success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            errors: {
+                status: 500,
+                source: req.path,
+                title: "Internal Server Error",
+                detail: error.message
+            }
+        });
+    }
+});
+
+router.post("/update/access", auth.checkToken, async (req, res) => {
+
+    try {
+        const user = auth.getCurrentUser();
+        console.log(`Current user is: ${user}`);
+        const result = await documents.addAccess(req.body, user);
         return res.status(201).json({ success: true });
     } catch (error) {
         console.error(error);

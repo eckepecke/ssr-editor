@@ -155,7 +155,6 @@ const auth = {
                 await db.collection.insertOne({
                     email: email,
                     password: hash,
-                    allowed_users: [],
                     docs: []
                 });
 

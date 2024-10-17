@@ -25,17 +25,25 @@ process.env.NODE_ENV = "test"
 /////////////////////////////////////////////
 
 // efo test
-import * as chaiModule from "chai";
-import chaiHttp from "chai-http/index.js";
-import server from "../app.mjs";
-import database from "../db/database.mjs";
-const collectionName = "documents";
-
-
+// import * as chaiModule from "chai";
+// import chaiHttp from "chai-http";
+// import server from "../app.mjs";
+// import database from "../db/database.mjs";
+// const collectionName = "users";
 
 // const chai = chaiModule.use(chaiHttp);
 
 // chai.should();
+
+
+import { use, expect } from 'chai'
+import chaiHttp from 'chai-http'
+import server from "../app.mjs";
+
+const chai = use(chaiHttp)
+const should = chai.should();
+chai.request()
+
 
 // describe('Reports', () => {
 //     describe('GET /test', () => {
@@ -57,7 +65,7 @@ const collectionName = "documents";
 describe('app', () => {
     describe('GET /', () => {
         it('200 HAPPY PATH getting index page', (done) => {
-            chai.request.execute(server)
+            chai.request(server)
                 .get("/")
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -88,11 +96,11 @@ describe('app', () => {
 //     });
 
 //     describe('GET /get/all', () => {
-//         it('should return 200 status', (done) => {
+//         it('should return 500 status since we are not logged in', (done) => {
 //             chai.request.execute(server)
 //                 .get("/get/all")
 //                 .end((err, res) => {
-//                     res.should.have.status(200);
+//                     res.should.have.status(500);
 //                     done();
 //                 });
 //         });
@@ -106,69 +114,69 @@ describe('app', () => {
 //                 });
 //         });
     
-        // it('should have a "data" property', (done) => {
-        //     chai.request.execute(server)
-        //         .get("/get/all")
-        //         .end((err, res) => {
-        //             res.body.should.have.property('data');
-        //             done();
-        //         });
-        // });
+//         it('should have a "data" property', (done) => {
+//             chai.request.execute(server)
+//                 .get("/get/all")
+//                 .end((err, res) => {
+//                     res.body.should.have.property('data');
+//                     done();
+//                 });
+//         });
     
-    //     it('data should be an array', (done) => {
-    //         chai.request.execute(server)
-    //             .get("/get/all")
-    //             .end((err, res) => {
-    //                 res.body.data.should.be.a('array');
-    //                 done();
-    //             });
-    //     });
-    // });
+//         it('data should be an array', (done) => {
+//             chai.request.execute(server)
+//                 .get("/get/all")
+//                 .end((err, res) => {
+//                     res.body.data.should.be.a('array');
+//                     done();
+//                 });
+//         });
+//     });
     
 
-    // describe('GET /get/add', () => {
-    //     it('200 HAPPY PATH getting get/add', (done) => {
-    //         chai.request.execute(server)
-    //             .get("/get/add")
-    //             .end((err, res) => {
-    //                 res.should.have.status(200);
-    //                 done();
-    //             });
-    //     });
+//     describe('GET /get/add', () => {
+//         it('200 HAPPY PATH getting get/add', (done) => {
+//             chai.request.execute(server)
+//                 .get("/get/add")
+//                 .end((err, res) => {
+//                     res.should.have.status(200);
+//                     done();
+//                 });
+//         });
 
-        // it('Testing that database returns object', (done) => {
-        //     chai.request.execute(server)
-        //         .get("/get/add")
-        //         .end((err, res) => {
-        //             res.body.should.be.a('object');
-        //             done();
-        //         });
-        // });
+//         it('Testing that database returns object', (done) => {
+//             chai.request.execute(server)
+//                 .get("/get/add")
+//                 .end((err, res) => {
+//                     res.body.should.be.a('object');
+//                     done();
+//                 });
+//         });
 
 
-        // it('Testing that result has data property', (done) => {
-        //     chai.request.execute(server)
-        //         .get("/get/add")
-        //         .end((err, res) => {
-        //             res.body.should.have.property('lastId');
-        //             done();
-        //         });
-        // });
-    // });
+//         it('Testing that result has data property', (done) => {
+//             chai.request.execute(server)
+//                 .get("/get/add")
+//                 .end((err, res) => {
+//                     res.body.should.have.property('lastId');
+//                     done();
+//                 });
+//         });
+//     });
 
-    // describe('POST /post/add', () => {
-    //     it('Testing post/add returns 500 posting invalid data', (done) => {
-    //         let doc = {
-    //             title: "test",
-    //             // content: "no content",
-    //             // id: 1
-    //         };
-    //         chai.request.execute(server)
-    //             .post("/post/add")
-    //             .end((err, res) => {
-    //                 res.should.have.status(500);
-    //                 done();
-    //             });
-    //     });
-    // });
+//     describe('POST /post/add', () => {
+//         it('Testing post/add returns 500 posting invalid data', (done) => {
+//             let doc = {
+//                 title: "test",
+//                 // content: "no content",
+//                 // id: 1
+//             };
+//             chai.request.execute(server)
+//                 .post("/post/add")
+//                 .end((err, res) => {
+//                     res.should.have.status(500);
+//                     done();
+//                 });
+//         });
+//     });
 // })

@@ -75,17 +75,33 @@ const docs = {
         }
     },
 
-    updateOne: async function updateOne(body) {
+    updateOne: async function updateOne(body, user) {
         let db = await database.getDb();
+        const idToFind = parseInt(body.id)
         console.log(body);
 
         try {
-            const intID = parseInt(body.id);
-            console.log(intID);
-            const result = await db.collection.updateOne(
-                { id: intID },
-                { $set: { title: body.title, content: body.content } }
-            );
+            const result = await db.collection.findOne({ email: user });
+            const docArray = result.docs;
+            console.log(docArray);
+
+            const docToUpdate = docArray.find(doc => doc.id === idToFind);
+
+            console.log(`doc to update: ${docToUpdate}`)
+            if (docToUpdate) {
+
+                docToUpdate.title = body.title;
+                docToUpdate.content = body.content;
+                docToUpdate.last_change = new Date();
+        
+                const result = await db.collection.updateOne(
+                    { email: user },
+                    { $set: { docs: docArray } }
+                );
+                console.log(result)
+
+            }
+
             return result;
         } catch (e) {
             console.error(e);
@@ -118,6 +134,38 @@ const docs = {
             return highestId;
         } catch (err) {
             throw new Error('Error finding max id: ' + err.message);
+        } finally {
+            await db.client.close();
+        }
+    },
+
+    addAccess: async function addAccess(body, user) {
+        let db = await database.getDb();
+        const idToFind = parseInt(body.id)
+        console.log(body);
+
+        try {
+            const result = await db.collection.findOne({ email: user });
+            const docArray = result.docs;
+            const docToUpdate = docArray.find(doc => doc.id === idToFind);
+
+            console.log(`doc to update: ${docToUpdate}`)
+            if (docToUpdate) {
+
+                docToUpdate.allowed_users.push(body.newUser);
+                docToUpdate.last_change = new Date();
+        
+                const result = await db.collection.updateOne(
+                    { email: user },
+                    { $set: { docs: docArray } }
+                );
+                console.log(result)
+
+            }
+
+            return result;
+        } catch (e) {
+            console.error(e);
         } finally {
             await db.client.close();
         }
