@@ -59,7 +59,6 @@ router.post("/update/doc", auth.checkToken, async (req, res) => {
 });
 
 router.post("/update/access", auth.checkToken, async (req, res) => {
-
     try {
         const user = auth.getCurrentUser();
         console.log(`Current user is: ${user}`);

@@ -15,6 +15,13 @@ const auth = {
         return auth.user;
     },
 
+    getCurrentToken: function getCurrentUser() {
+        return {
+            user: auth.user,
+            token: auth.token
+        };
+    },
+
     login: async function(res, body) {
         const email = body.email;
         const password = body.password;
@@ -210,6 +217,39 @@ const auth = {
 
             return next();
         });
+
+    },
+
+    checkTokenValidity: function(req, res, next) {
+        console.log(`Check token: ${auth.token}`)
+
+        const token = auth.token;
+
+        if (token === "") {
+            return res.status(401).json({
+                errors: {
+                    status: 401,
+                    source: req.path,
+                    title: "No token",
+                    detail: "No token provided in request headers"
+                }
+            });
+        } 
+
+        jwt.verify(token, jwtSecret, function(err, decoded) {
+            if (err) {
+                return res.status(500).json({
+                    errors: {
+                        status: 500,
+                        source: req.path,
+                        title: "Failed authentication",
+                        detail: err.message
+                    }
+                });
+            }
+        });
+
+        return true;
 
     }
 };
