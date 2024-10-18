@@ -2,16 +2,21 @@ import React, { useState } from 'react';
 import AuthForm from './AuthForm';
 
 
-const LoginForm = ({ onLoginSuccess, onTryingToRegister }) => {
+const LoginForm = ({ onLoginSuccess, onTryingToRegister, successMessage }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState(''); // State for error messages
+  const [errorMessage, setErrorMessage] = useState('');
+  const [loadingText, setLoadingText] = useState('');
+
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+        setErrorMessage('')
+        setLoadingText('Trying to login..');   
+
       // Send login data to the server using fetch (or axios)
       const response = await fetch('/auth/login', {
         method: 'POST',
@@ -20,6 +25,7 @@ const LoginForm = ({ onLoginSuccess, onTryingToRegister }) => {
         },
         body: JSON.stringify({ email, password }),
       });
+      setLoadingText('');   
 
       // If login is successful
       if (response.ok) {
@@ -40,6 +46,7 @@ const LoginForm = ({ onLoginSuccess, onTryingToRegister }) => {
   return (
     <div>
       <h2>Login</h2>
+      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
       <AuthForm
         email={email}
         password={password}
@@ -50,6 +57,7 @@ const LoginForm = ({ onLoginSuccess, onTryingToRegister }) => {
       />
 
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+      {loadingText && <p>{loadingText}</p>}
 
       <button onClick={onTryingToRegister}>Register here</button>
 

@@ -11,6 +11,7 @@ import RegisterForm from './components/RegisterForm';
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
 
   return (
@@ -21,13 +22,17 @@ const App = () => {
         ) : (
             isRegistering ? (
               <RegisterForm 
-                onRegisterSuccess={() => setIsRegistering(false)}
-                onAlreadyHaveAccount={() => setIsRegistering(false)}
+              onRegisterSuccess={(message) => {
+                setIsRegistering(false);
+                setSuccessMessage(message);
+              }} 
+              onAlreadyHaveAccount={() => setIsRegistering(false)}
               />
             ) : (
               <LoginForm
                 onLoginSuccess={() => setIsLoggedIn(true)}
                 onTryingToRegister={() => setIsRegistering(true)}
+                successMessage={successMessage}
               />
             )
           )}
