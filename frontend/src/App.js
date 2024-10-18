@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './App.css';
 import Documents from './components/Documents';
 import LoginForm from './components/LoginForm';
-
+import RegisterForm from './components/RegisterForm';
 
 /**
  * App Component
@@ -10,6 +10,8 @@ import LoginForm from './components/LoginForm';
  */
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
+
 
   return (
     <div className="App">
@@ -17,8 +19,18 @@ const App = () => {
         {isLoggedIn ? (
           <Documents />
         ) : (
-          <LoginForm onLoginSuccess={() => setIsLoggedIn(true)} />
-        )}
+            isRegistering ? (
+              <RegisterForm 
+                onRegisterSuccess={() => setIsRegistering(false)}
+                onAlreadyHaveAccount={() => setIsRegistering(false)}
+              />
+            ) : (
+              <LoginForm
+                onLoginSuccess={() => setIsLoggedIn(true)}
+                onTryingToRegister={() => setIsRegistering(true)}
+              />
+            )
+          )}
       </div>
     </div>
   );

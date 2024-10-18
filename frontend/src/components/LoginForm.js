@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import AuthForm from './AuthForm';
 
-const LoginForm = ({ onLoginSuccess }) => {
+
+const LoginForm = ({ onLoginSuccess, onTryingToRegister }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(''); // State for error messages
@@ -37,32 +39,20 @@ const LoginForm = ({ onLoginSuccess }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">E-mail:</label>
-        <input
-          type="email"
-          id="email"
-          placeholder="E-mail"
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)} // Update email state
-          required
-        />
+      <h2>Login</h2>
+      <AuthForm
+        email={email}
+        password={password}
+        setEmail={setEmail}
+        setPassword={setPassword}
+        onSubmit={handleSubmit}
+        buttonText="Login"
+      />
 
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)} // Update password state
-          required
-        />
-
-        <input type="submit" value="Login user" />
-      </form>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+
+      <button onClick={onTryingToRegister}>Register here</button>
+
     </div>
   );
 };
