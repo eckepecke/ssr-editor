@@ -1,6 +1,8 @@
 import express from 'express';
 import documents from "../models/docs.mjs";
 import auth from "../models/auth.js"
+import sgMail from '@sendgrid/mail';
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const router = express.Router();
 
@@ -62,7 +64,25 @@ router.post("/update/access", auth.checkToken, async (req, res) => {
     try {
         const user = auth.getCurrentUser();
         console.log(`Current user is: ${user}`);
+        console.log(`Current document is: ${req.body}`);
+        console.log(`Current document is: ${req.body.newUser}`);
+
+
         const result = await documents.addAccess(req.body, user);
+        console.log(`SendGrid API Key: ${process.env.SENDGRID_API_KEY}`);
+
+
+        const msg = {
+            to: req.body.newUser,
+            from: 'eroo23@student.bth.se',
+            subject: `Invitation to edit document: ${req.body.title}`,
+            text: `Hello ${req.body.newUser},\n\nYou have been granted access to the document: ${req.body.title} by ${user}.`,
+            html: `<strong>Hello ${req.body.newUser},</strong><p>You have been granted access to the document: ${req.body.title} by ${user}.</p>`
+        };
+
+        const response = await sgMail.send(msg);
+        console.log(response);
+
         return res.status(201).json({ success: true });
     } catch (error) {
         console.error(error);

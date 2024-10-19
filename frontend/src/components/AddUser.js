@@ -23,7 +23,10 @@ const AddUser = ({ document, onUpdate, onClose, onUpdateSuccess }) => {
       const response = await fetch(`/post/update/access`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ newUser, id: document.id
+          body: JSON.stringify({
+                newUser,
+                id: document.id,
+                title: document.title
               })
           });
 
