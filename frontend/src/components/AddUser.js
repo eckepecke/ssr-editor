@@ -4,24 +4,49 @@ import React, { useState } from 'react';
  * AddUser Component
  * Renders a form to edit an existing document.
  */
-const AddUser = ({ document, onUpdate, onClose }) => {
+const AddUser = ({ document, onUpdate, onClose, onUpdateSuccess }) => {
     const [newUser, setNewUser] = useState('');
+    const [loadingText, setLoadingText] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+
+
 
   /**
    * Handles form submission to update the document.
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage('')
+    setLoadingText('Updating access..'); 
+    
+    try {
+      const response = await fetch(`/post/update/access`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ newUser, id: document.id
+              })
+          });
 
-    await fetch(`/post/update/access`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ newUser, id: document.id
-         })
-      });
+      setLoadingText('');
 
-      onUpdate(newUser);
-      onClose();
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('add successful wihoo:', data);
+
+        onUpdate(newUser);
+        onUpdateSuccess(`User ${newUser} can now edit the document.`)
+        onClose();
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Login failed. Please try again.');        console.error('Login failed');
+      }
+
+    } catch (error) {
+        console.error('An error occurred during login:', error);
+      }
+
+
   };
 
 
@@ -29,6 +54,7 @@ const AddUser = ({ document, onUpdate, onClose }) => {
     <div className="edit-form-overlay">
       <form onSubmit={handleSubmit} className="edit-form">
         <h2>Add user email</h2>
+        {loadingText && <p>{loadingText}</p>}
         <div>
           <label htmlFor="addNewUser">User Email:</label>
           <input

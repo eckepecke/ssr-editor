@@ -17,7 +17,6 @@ const LoginForm = ({ onLoginSuccess, onTryingToRegister, successMessage }) => {
         setErrorMessage('')
         setLoadingText('Trying to login..');   
 
-      // Send login data to the server using fetch (or axios)
       const response = await fetch('/auth/login', {
         method: 'POST',
         headers: {
@@ -27,16 +26,14 @@ const LoginForm = ({ onLoginSuccess, onTryingToRegister, successMessage }) => {
       });
       setLoadingText('');   
 
-      // If login is successful
       if (response.ok) {
         const data = await response.json();
         console.log('Login successful wihoo:', data);
 
-        // Call the function passed as prop to set the login state in App component
         onLoginSuccess();
       } else {
-        const errorData = await response.json(); // Assuming the server sends back error details
-        setErrorMessage(errorData.message || 'Login failed. Please try again.');        console.error('Login failed');
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Login failed. Please try again.');
       }
     } catch (error) {
       console.error('An error occurred during login:', error);
