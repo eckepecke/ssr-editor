@@ -7,6 +7,7 @@ import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
 import path from 'path';
+import http from 'http';
 
 import './db/database.mjs'
 
@@ -17,7 +18,10 @@ import auth from "./routes/auth.js";
 
 const app = express();
 import authModel from "./models/auth.js";
+import initializeSocket from './socket.mjs';
 
+const server = http.createServer(app);
+initializeSocket(server);
 
 app.disable('x-powered-by');
 
@@ -55,6 +59,6 @@ app.use((req,res, next) => {
     next(err);
 });
 
-const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+server.listen(port, () => console.log(`Server running on port ${port}`));
 
 export default server;

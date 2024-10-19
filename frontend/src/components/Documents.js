@@ -3,7 +3,7 @@ import AddDocument from './AddDocument';
 import EditDocument from './EditDocument';
 import Document from './Document';
 import AddUser from './AddUser';
-
+import { initializeSocket, sendDocumentUpdate, disconnectSocket } from './SocketClient';
 
 /**
  * Documents Component
@@ -15,6 +15,10 @@ const Documents = () => {
   const [editingAccess, setEditingAccess] = useState(null);
   const [loadingText, setLoadingText] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [currentDocumentContent, setCurrentDocumentContent] = useState('');
+  const [roomId, setRoomId] = useState(null);
+
+  const SERVER_URL = 'http://localhost:8080';
 
   /**
    * Fetches documents from the backend API.
@@ -52,34 +56,49 @@ const Documents = () => {
   };
 
   /**
-   * Initiates the editing process for a document.
+   * Initiates the editing process for a document and sets up the socket connection.
    * @param {Object} doc - The document to be edited.
    */
   const handleEditClick = (doc) => {
     setEditingDocument(doc);
+    setRoomId(doc.id); // Set roomId for socket connection
+    setCurrentDocumentContent(doc.content); // Set the initial content for the editor
+
+    // Initialize socket connection for the selected document room
+    initializeSocket(SERVER_URL, doc.id, setCurrentDocumentContent);
   };
 
   /**
-   * Closes the edit form.
+   * Handles sending updates to the socket when the document content is changed.
+   * @param {string} newContent - The new content of the document.
+   */
+  const handleDocumentUpdate = (newContent) => {
+    setCurrentDocumentContent(newContent); // Update content locally
+    sendDocumentUpdate(roomId, newContent); // Send update to other clients via socket
+  };
+
+  /**
+   * Closes the edit form and disconnects the socket.
    */
   const closeEditForm = () => {
     setEditingDocument(null);
+    disconnectSocket(); // Disconnect the socket when the document is no longer being edited
   };
 
-    /**
+  /**
    * Initiates the editing process for a add user form.
    * @param {Object} doc - The document to be edited.
    */
-    const handleUpdateAccess = (doc) => {
-        setEditingAccess(doc);
-      };
+  const handleUpdateAccess = (doc) => {
+      setEditingAccess(doc);
+    };
 
-    const handleUpdateSuccess = (message) => {
-        setSuccessMessage(message);
-        setTimeout(() => setSuccessMessage(''), 5000);
-      };
+  const handleUpdateSuccess = (message) => {
+      setSuccessMessage(message);
+      setTimeout(() => setSuccessMessage(''), 5000);
+    };
 
-      /**
+  /**
    * Closes the edit form.
    */
   const closeAccessForm = () => {
@@ -95,6 +114,8 @@ const Documents = () => {
           document={editingDocument}
           onUpdate={handleUpdateDocument}
           onClose={closeEditForm}
+          currentContent={currentDocumentContent}
+          onContentChange={handleDocumentUpdate}
         />
       )}
       {editingAccess && (

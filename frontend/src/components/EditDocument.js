@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 /**
  * EditDocument Component
  * Renders a form to edit an existing document.
  */
-const EditDocument = ({ document, onUpdate, onClose }) => {
+const EditDocument = ({ document, onUpdate, onClose, onContentChange, currentContent }) => {
   const [title, setTitle] = useState(document.title);
   const [content, setContent] = useState(document.content);
+
+  useEffect(() => {
+    if (currentContent !== content) {
+      setContent(currentContent);
+    }
+  }, [currentContent]);
+
+  const handleContentChange = (e) => {
+    const newContent = e.target.value;
+    setContent(newContent);
+    onContentChange(newContent);
+  };
 
   /**
    * Handles form submission to update the document.
@@ -43,7 +55,7 @@ const EditDocument = ({ document, onUpdate, onClose }) => {
           <textarea
             id="editContent"
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={handleContentChange}
             required
           ></textarea>
         </div>

@@ -28,7 +28,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.9.0",
     "morgan": "^1.10.0",
-    "node-html-parser": "^6.1.13"
+    "node-html-parser": "^6.1.13",
+    "socket.io": "^4.8.0"
   },
   "type": "module",
   "devDependencies": {
