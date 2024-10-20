@@ -9,14 +9,27 @@ const docs = {
 
             const result = await db.collection.findOne({ email: user });
 
-            console.log(result);
-
             if (result && result.docs) {
-                return result.docs;
+                let allDocs = result.docs;
+                const collabDocs = result.collabDocs;
+                console.log("collabDocs:")
+                console.log(collabDocs);
+
+                for (const entry of collabDocs) {
+                    let docId = entry.docId
+
+                    const tempRes = await db.collection.findOne({ email: entry.owner });
+                    const tempResDocs = tempRes.docs;
+
+                    let collabDoc = tempResDocs.find(doc => doc.id === docId);
+
+                    allDocs.push(collabDoc);
+                }
+                return allDocs;
             } else {
                 return [];
             }
-        } catch (error) {
+        } catch (e) {
             console.error(e);
             return [];
         } finally {
@@ -154,11 +167,13 @@ const docs = {
 
                 docToUpdate.allowed_users.push(body.newUser);
                 docToUpdate.last_change = new Date();
-        
+
                 const result = await db.collection.updateOne(
                     { email: user },
                     { $set: { docs: docArray } }
                 );
+
+                const response = await docs.addCollabMap(user, body.id, body.newUser);
                 console.log(result)
 
             }
@@ -169,6 +184,34 @@ const docs = {
         } finally {
             await db.client.close();
         }
+    },
+
+    addCollabMap: async function addCollabMap(owner, docId, collaborator) {
+        let db = await database.getDb();
+
+        try {
+        const result = await db.collection.findOne({ email: collaborator });
+
+        const newCollab = {
+            owner: owner,
+            docId: docId,
+        }
+
+        const collabArray = result.collabDocs;
+        collabArray.push(newCollab);
+
+        const response = await db.collection.updateOne(
+            { email: collaborator },
+            { $set: { collabDocs: collabArray } }
+        );
+
+        return response;
+    } catch (e) {
+        console.error(e);
+    } finally {
+        await db.client.close();
+    }
+
     }
 };
 

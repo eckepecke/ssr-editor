@@ -162,7 +162,8 @@ const auth = {
                 await db.collection.insertOne({
                     email: email,
                     password: hash,
-                    docs: []
+                    docs: [],
+                    collabDocs: [],
                 });
 
                 return res.status(201).json({
@@ -217,39 +218,6 @@ const auth = {
 
             return next();
         });
-
-    },
-
-    checkTokenValidity: function(req, res, next) {
-        console.log(`Check token: ${auth.token}`)
-
-        const token = auth.token;
-
-        if (token === "") {
-            return res.status(401).json({
-                errors: {
-                    status: 401,
-                    source: req.path,
-                    title: "No token",
-                    detail: "No token provided in request headers"
-                }
-            });
-        } 
-
-        jwt.verify(token, jwtSecret, function(err, decoded) {
-            if (err) {
-                return res.status(500).json({
-                    errors: {
-                        status: 500,
-                        source: req.path,
-                        title: "Failed authentication",
-                        detail: err.message
-                    }
-                });
-            }
-        });
-
-        return true;
 
     }
 };
