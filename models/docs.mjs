@@ -11,20 +11,25 @@ const docs = {
 
             if (result && result.docs) {
                 let allDocs = result.docs;
-                const collabDocs = result.collabDocs;
-                console.log("collabDocs:")
-                console.log(collabDocs);
 
-                for (const entry of collabDocs) {
-                    let docId = entry.docId
+                if (result.collabDocs) {
+                    const collabDocs = result.collabDocs;
 
-                    const tempRes = await db.collection.findOne({ email: entry.owner });
-                    const tempResDocs = tempRes.docs;
-
-                    let collabDoc = tempResDocs.find(doc => doc.id === docId);
-
-                    allDocs.push(collabDoc);
+                    allDocs = docs.appendCollabDocs(allDocs, collabDocs);
                 }
+                // console.log("collabDocs:")
+                // console.log(collabDocs);
+
+                // for (const entry of collabDocs) {
+                //     let docId = entry.docId
+
+                //     const tempRes = await db.collection.findOne({ email: entry.owner });
+                //     const tempResDocs = tempRes.docs;
+
+                //     let collabDoc = tempResDocs.find(doc => doc.id === docId);
+
+                //     allDocs.push(collabDoc);
+                // }
                 return allDocs;
             } else {
                 return [];
@@ -211,6 +216,31 @@ const docs = {
     } finally {
         await db.client.close();
     }
+
+    },
+
+    appendCollabDocs: async function appendCollabDocs(ownerDocs, collabDocs) {
+        console.log("collabDocs:")
+        console.log(collabDocs);
+        let db = await database.getDb(); 
+
+        try {
+            for (const entry of collabDocs) {
+                let docId = entry.docId
+                
+                const tempRes = await db.collection.findOne({ email: entry.owner });
+                const tempResDocs = tempRes.docs;
+    
+                let collabDoc = tempResDocs.find(doc => doc.id === docId);
+    
+                ownerDocs.push(collabDoc);
+            }
+            return ownerDocs;
+        } catch(e) {
+            console.error(e)
+        } finally {
+            await db.client.close();
+        }
 
     }
 };
