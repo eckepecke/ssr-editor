@@ -5,9 +5,9 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/xml/xml';
 import 'codemirror/theme/dracula.css';
 
-const CodeInput = () => {
+const CodeInput = ({ setCodeContent }) => {
     const editorRef = useRef(null);
-    const [code, setCode] = useState('');
+    // const [code, setCode] = useState('');
     const [editorInstance, setEditorInstance] = useState(null);
 
 
@@ -48,8 +48,18 @@ const CodeInput = () => {
                 theme: 'dracula',
             });
             setEditorInstance(cmInstance);
+
+            // Listen to changes and update the content in the parent component
+            cmInstance.on('change', () => {
+                const updatedCode = cmInstance.getValue();
+                if (setCodeContent) {
+                    setCodeContent(updatedCode); // Only call if setCodeContent is defined
+                } else {
+                    console.error("setCodeContent is not defined");
+                }
+            });
         }
-    }, [editorInstance]);
+    }, [editorInstance, setCodeContent]);
   
     return (
     <>
