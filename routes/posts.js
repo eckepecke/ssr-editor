@@ -1,8 +1,10 @@
 import express from 'express';
 import documents from "../models/docs.mjs";
 import auth from "../models/auth.js"
-import sgMail from '@sendgrid/mail';
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// import sgMail from '@sendgrid/mail';
+import mailgun from 'mailgun-js';
+
+// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const router = express.Router();
 
@@ -69,6 +71,32 @@ router.post("/update/access", auth.checkToken, async (req, res) => {
 
 
         const result = await documents.addAccess(req.body, user);
+
+        const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY,
+            domain: process.env.MAILGUN_DOMAIN });
+
+        const data = {
+        from: user,
+        // I can only send emails to my verified email
+        // with my current domain
+        // to: 'erikolofsson95@gmail.com',
+        to: req.body.newUser,
+        subject: 'Hello',
+        text: `Du har blivit inbjuden av ${user}
+         att redigera dokumentet: ${req.body.title}.
+        Om du inte redan har en användare registrera dig på:
+        https://jsramverk-eroo23.azurewebsites.net
+         Använd mailadressen du fått mailet till vid registrering.`,
+        };
+
+        mg.messages().send(data, (error, body) => {
+        if (error) {
+            console.error('Error sending email:', error);
+        } else {
+            console.log('Email sent successfully:', body);
+        }
+        })
+
         // console.log(`SendGrid API Key: ${process.env.SENDGRID_API_KEY}`);
 
 
@@ -82,6 +110,8 @@ router.post("/update/access", auth.checkToken, async (req, res) => {
 
         // const response = await sgMail.send(msg);
         // console.log(response);
+
+        
 
         return res.status(201).json({ success: true });
     } catch (error) {
