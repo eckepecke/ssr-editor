@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import CodeInput from './CodeInput';
+
 
 /**
  * AddDocument Component
@@ -7,6 +9,9 @@ import React, { useState } from 'react';
 const AddDocument = ({ onAdd }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [isCodeMode, setIsCodeMode] = useState(false)
+  console.log('AddDocument rendered, isCodeMode:', isCodeMode);
+
 
   /**
    * Generates a unique ID for the new document.
@@ -38,32 +43,51 @@ const AddDocument = ({ onAdd }) => {
     }
   };
 
+  const toggleCodeMode = useCallback(() => {
+    setIsCodeMode(prevMode => !prevMode);
+  }, []);
+
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Add Document</h2>
-      <div>
-        <label htmlFor="documentTitle">Title:</label>
-        <input
-          type="text"
-          id="documentTitle"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          placeholder="Enter document title..."
-        />
-      </div>
-      <div>
-        <label htmlFor="documentContent">Content:</label>
-        <textarea
-          id="documentContent"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          required
-          placeholder="Enter document content..."
-        />
-      </div>
-      <button type="submit">Add Document</button>
-    </form>
+    <>
+    {isCodeMode ? (
+        <>
+        <CodeInput />
+        </>
+
+    ) : (
+    <>
+        <form onSubmit={handleSubmit}>
+        <h2>Add Document</h2>
+        <div>
+          <label htmlFor="documentTitle">Title:</label>
+          <input
+            type="text"
+            id="documentTitle"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            placeholder="Enter document title..."
+          />
+        </div>
+        <div>
+          <label htmlFor="documentContent">Content:</label>
+          <textarea
+            id="documentContent"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            required
+            placeholder="Enter document content..."
+          />
+        </div>
+        <button type="submit">Add Document</button>
+        </form>
+    </>
+
+    )}
+    <button type="button" onClick={toggleCodeMode}>Activate Code Mode</button>
+
+    </>
+
   );
 };
 

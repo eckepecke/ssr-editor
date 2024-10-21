@@ -115,3 +115,7 @@ li button {
   padding: 8px 16px;
   cursor: pointer;
 }
+
+#editor {
+    text-align: left;
+}
