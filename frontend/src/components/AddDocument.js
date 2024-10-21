@@ -25,11 +25,14 @@ const AddDocument = ({ onAdd }) => {
     e.preventDefault();
 
     const newId = generateUniqueID();
+    const isCode = isCodeMode;
+
+
 
     const response = await fetch('/post/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: newId, title, content }),
+      body: JSON.stringify({ id: newId, title, content, isCode }),
     });
 
     const data = await response.json();

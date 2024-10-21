@@ -55,6 +55,7 @@ const docs = {
                       title: body.title,
                       content: body.content,
                       allowed_users: [user],
+                      is_code: body.isCode,
                       created_at: new Date()
                     }
                   }
