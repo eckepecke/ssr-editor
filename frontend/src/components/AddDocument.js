@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import CodeInput from './CodeInput';
 
 
@@ -43,15 +43,14 @@ const AddDocument = ({ onAdd }) => {
     }
   };
 
-  const toggleCodeMode = useCallback(() => {
-    setIsCodeMode(prevMode => !prevMode);
-  }, []);
-
   return (
     <>
     {isCodeMode ? (
         <>
         <CodeInput />
+        <button onClick={() => setIsCodeMode(false)}>
+            Exit Code Mode
+        </button>
         </>
 
     ) : (
@@ -80,11 +79,14 @@ const AddDocument = ({ onAdd }) => {
           />
         </div>
         <button type="submit">Add Document</button>
+
         </form>
+        <button onClick={() => setIsCodeMode(true)}>
+            Activate Code Mode
+        </button>
     </>
 
     )}
-    <button type="button" onClick={toggleCodeMode}>Activate Code Mode</button>
 
     </>
 
