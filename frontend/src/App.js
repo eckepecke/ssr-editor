@@ -13,7 +13,6 @@ const App = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
-
   return (
     <div className="App">
       <div className="container">
