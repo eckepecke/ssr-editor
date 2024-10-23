@@ -1,6 +1,5 @@
-import 'dotenv/config';
-
-import { MongoClient, ServerApiVersion } from 'mongodb';
+require('dotenv/config');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const database = {
     getDb: async function getDb () {
@@ -32,4 +31,4 @@ const database = {
     }
 };
 
-export default database;
+module.exports = database;

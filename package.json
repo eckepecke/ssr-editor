@@ -4,9 +4,10 @@
   "description": "Starter project for DV1677 JSRamverk",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=html --reporter=text --reporter=clover mocha --timeout 20000",
-    "start": "node app.mjs",
-    "production": "NODE_ENV='production' node app.mjs",
+    "test": "jest --config jest-backend.config.js --coverage",
+    "coverage": "nyc jest",
+    "start": "node app.js",
+    "production": "NODE_ENV='production' node app.js",
     "eslint": "eslint .",
     "clean": "rm -rf node_modules package-lock.json",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
@@ -33,9 +34,10 @@
     "socket.io": "^4.8.0",
     "socket.io-client": "^4.8.0"
   },
-  "type": "module",
   "devDependencies": {
     "@eslint/js": "^9.11.1",
+    "@types/jest": "^29.5.14",
+    "@types/supertest": "^6.0.2",
     "chai": "^5.1.1",
     "chai-http": "^5.1.1",
     "concurrently": "^9.0.1",
@@ -43,23 +45,9 @@
     "eslint-plugin-react": "^7.37.0",
     "globals": "^15.9.0",
     "javascript-style-guide": "^1.0.1",
+    "jest": "^29.7.0",
     "mocha": "^10.7.3",
-    "nyc": "^17.1.0"
-  },
-  "nyc": {
-    "include": [
-      "app.mjs",
-      "database/**/*.mjs",
-      "models/**/*.mjs",
-      "routes/**/*.js"
-    ],
-    "exclude": [
-      "test/**/*.js"
-    ],
-    "reporter": [
-      "text",
-      "html"
-    ],
-    "all": true
+    "nyc": "^17.1.0",
+    "supertest": "^7.0.0"
   }
 }

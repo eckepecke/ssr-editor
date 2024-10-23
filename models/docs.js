@@ -1,4 +1,4 @@
-import database from '../db/database.mjs'
+const database = require("../db/database");
 
 const docs = {
     getAll: async function getAll(user) {
@@ -246,4 +246,4 @@ const docs = {
     }
 };
 
-export default docs;
+module.exports = docs;
