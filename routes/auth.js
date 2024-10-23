@@ -1,9 +1,7 @@
-import express from 'express';
-import database from '../db/database.mjs';
+const express = require('express');
+const database = require("../db/database");
 const router = express.Router();
-
-import auth from "../models/auth.js";
-
+const auth = require("../models/auth");
 
 router.get('/register', (req, res) => {
 
@@ -22,5 +20,5 @@ router.get('/', (req, res) => {
     res.redirect('/documentation.html');
 });
 
-export default router;
+module.exports = router;
 

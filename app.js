@@ -1,24 +1,24 @@
-import 'dotenv/config'
+require('dotenv/config');
 
 const port = process.env.PORT || 8080;
 
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import express from 'express';
-import morgan from 'morgan';
-import path from 'path';
-import http from 'http';
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const express = require('express');
+const morgan = require('morgan');
+const path = require('path');
+const http = require('http');
 
-import './db/database.mjs'
+require('./db/database');
 
-import gets from "./routes/gets.js"
-import index from "./routes/index.js"
-import posts from "./routes/posts.js"
-import auth from "./routes/auth.js";
+const gets = require('./routes/gets');
+const index = require('./routes/index');
+const posts = require('./routes/posts');
+const auth = require('./routes/auth');
 
 const app = express();
-import authModel from "./models/auth.js";
-import initializeSocket from './socket.mjs';
+const authModel = require('./models/auth');
+const initializeSocket = require('./socket');
 
 const server = http.createServer(app);
 initializeSocket(server);
@@ -51,7 +51,10 @@ app.use('/post', posts);
 app.use('/get', gets);
 app.use('/auth', auth);
 
-
+// Example route for testing
+app.get('/test', (req, res) => {
+    res.status(200).json({ message: 'Success' }); // Return a sample response
+});
 
 app.use((req,res, next) => {
     var err = new Error("Not found");
@@ -61,4 +64,4 @@ app.use((req,res, next) => {
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
 
-export default server;
+module.exports = { app, server };

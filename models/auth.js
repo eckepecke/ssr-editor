@@ -1,9 +1,9 @@
-import database from "../db/database.mjs";
-import hat from "hat";
-import validator from "email-validator";
+const database = require("../db/database");
+const hat = require("hat");
+const validator = require("email-validator");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -222,5 +222,5 @@ const auth = {
     }
 };
 
-export default auth;
+module.exports = auth;
 

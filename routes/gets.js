@@ -1,8 +1,6 @@
-import express from 'express';
-import documents from "../models/docs.mjs";
-import auth from "../models/auth.js";
-
-
+const express = require('express');
+const documents = require("../models/docs");
+const auth = require("../models/auth");
 const router = express.Router();
 
 
@@ -69,4 +67,4 @@ router.get('/:id', auth.checkToken, async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;
