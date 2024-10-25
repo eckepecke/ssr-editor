@@ -8,19 +8,19 @@ const jwt = require('jsonwebtoken');
 const jwtSecret = process.env.JWT_SECRET;
 
 const auth = {
-    token: "",
-    user: "",
+    token: null,
+    user: null,
 
     getCurrentUser: function getCurrentUser() {
         return auth.user;
     },
 
-    getCurrentToken: function getCurrentUser() {
-        return {
-            user: auth.user,
-            token: auth.token
-        };
-    },
+    // getCurrentCredentials: function getCurrentCredentials() {
+    //     return {
+    //         user: auth.user,
+    //         token: auth.token
+    //     };
+    // },
 
     login: async function(res, body) {
         const email = body.email;

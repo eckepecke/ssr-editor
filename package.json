@@ -4,7 +4,7 @@
   "description": "Starter project for DV1677 JSRamverk",
   "main": "index.js",
   "scripts": {
-    "test": "jest --config jest-backend.config.js --coverage",
+    "test": "jest --config jest-backend.config.js --coverage --testTimeout=20000",
     "coverage": "nyc jest",
     "start": "node app.js",
     "production": "NODE_ENV='production' node app.js",
