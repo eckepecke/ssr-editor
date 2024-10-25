@@ -6,7 +6,6 @@ beforeAll(async () => {
     res = await database.getDb();
 });
 
-
 test('db should return db, client, and collection', async () => {
     expect(res.db).toBeDefined();
     expect(res.client).toBeDefined();

@@ -5,8 +5,6 @@ const docs = {
         let db = await database.getDb();
 
         try {
-            console.log("Trying to fetch documents for user:", user);
-
             const result = await db.collection.findOne({ email: user });
 
             if (result && result.docs) {
@@ -17,19 +15,6 @@ const docs = {
 
                     allDocs = docs.appendCollabDocs(allDocs, collabDocs);
                 }
-                // console.log("collabDocs:")
-                // console.log(collabDocs);
-
-                // for (const entry of collabDocs) {
-                //     let docId = entry.docId
-
-                //     const tempRes = await db.collection.findOne({ email: entry.owner });
-                //     const tempResDocs = tempRes.docs;
-
-                //     let collabDoc = tempResDocs.find(doc => doc.id === docId);
-
-                //     allDocs.push(collabDoc);
-                // }
                 return allDocs;
             } else {
                 return [];
@@ -62,7 +47,6 @@ const docs = {
                 }
               );
 
-            console.log(result);
             return result;
         } catch (e) {
             console.error(e);
@@ -97,16 +81,13 @@ const docs = {
     updateOne: async function updateOne(body, user) {
         let db = await database.getDb();
         const idToFind = parseInt(body.id)
-        console.log(body);
 
         try {
             const result = await db.collection.findOne({ email: user });
             const docArray = result.docs;
-            console.log(docArray);
 
             const docToUpdate = docArray.find(doc => doc.id === idToFind);
 
-            console.log(`doc to update: ${docToUpdate}`)
             if (docToUpdate) {
 
                 docToUpdate.title = body.title;
@@ -117,8 +98,6 @@ const docs = {
                     { email: user },
                     { $set: { docs: docArray } }
                 );
-                console.log(result)
-
             }
 
             return result;
@@ -136,9 +115,6 @@ const docs = {
             const result = await db.collection.findOne({ email: user });
             const docArray = result.docs;
 
-            console.log(result);
-            console.log(docArray);
-
             let highestId = 0;
 
             for (const doc of docArray) {
@@ -147,9 +123,6 @@ const docs = {
                 } 
             }
 
-            console.log("checking output")
-            console.log(highestId);
-  
             return highestId;
         } catch (err) {
             throw new Error('Error finding max id: ' + err.message);
@@ -161,14 +134,12 @@ const docs = {
     addAccess: async function addAccess(body, user) {
         let db = await database.getDb();
         const idToFind = parseInt(body.id)
-        console.log(body);
 
         try {
             const result = await db.collection.findOne({ email: user });
             const docArray = result.docs;
             const docToUpdate = docArray.find(doc => doc.id === idToFind);
 
-            console.log(`doc to update: ${docToUpdate}`)
             if (docToUpdate) {
 
                 docToUpdate.allowed_users.push(body.newUser);
@@ -180,8 +151,6 @@ const docs = {
                 );
 
                 const response = await docs.addCollabMap(user, body.id, body.newUser);
-                console.log(result)
-
             }
 
             return result;

@@ -3,7 +3,6 @@ const request = require('supertest');
 const { app, server } = require('../app.js');
 
 afterAll(async () => {
-    console.log("closing server 1");
     await server.close();
 });
 

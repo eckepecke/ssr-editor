@@ -4,7 +4,6 @@ const validator = require("email-validator");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-
 const jwtSecret = process.env.JWT_SECRET;
 
 const auth = {
@@ -15,12 +14,9 @@ const auth = {
         return auth.user;
     },
 
-    // getCurrentCredentials: function getCurrentCredentials() {
-    //     return {
-    //         user: auth.user,
-    //         token: auth.token
-    //     };
-    // },
+    getCurrentToken: function getCurrentToken() {
+        return auth.token;
+    },
 
     login: async function(res, body) {
         const email = body.email;
@@ -43,7 +39,6 @@ const auth = {
             db = await database.getDb();
 
             const user = await db.collection.findOne({ email: email });
-            console.log(user);
 
             if (user) {
                 return auth.comparePasswords(
@@ -188,8 +183,6 @@ const auth = {
     },
 
     checkToken: function(req, res, next) {
-        console.log(`Check token: ${auth.token}`)
-        console.log(`Check user: ${auth.user}`)
 
         const token = auth.token;
 
