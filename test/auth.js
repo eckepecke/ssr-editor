@@ -6,6 +6,7 @@ const auth = require('../models/auth.js');
 
 let usersCollection;
 let db;
+const email = "auth@test.com"
 
 beforeAll(async () => {
     const res = await database.getDb();
@@ -34,7 +35,7 @@ test('Posting correct body should result in 201 response', async () => {
     const res = await request(server)
         .post('/auth/register')
         .send({
-            email: "test@email.com",
+            email: email,
             password: "password"
         });
 
@@ -57,7 +58,7 @@ test('Posting only email should return 401', async () => {
     const res = await request(server)
         .post('/auth/register')
         .send({
-            email: "test@email.se"
+            email: email
         });
 
     expect(res.statusCode).toBe(401);
@@ -68,7 +69,7 @@ test('Logging in with incorrect password should not succeed', async () => {
     const res = await request(server)
         .post('/auth/login')
         .send({
-            email: "test@email.com",
+            email: email,
             password: "fail"
         });
 
@@ -102,7 +103,7 @@ test('Logging in with correct credentials should succeed', async () => {
     const res = await request(server)
         .post('/auth/login')
         .send({
-            email: "test@email.com",
+            email: email,
             password: "password"
         });
 
@@ -111,6 +112,6 @@ test('Logging in with correct credentials should succeed', async () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body.data).toHaveProperty('message', 'User logged in');
-    expect(user).toBe("test@email.com");
+    expect(user).toBe(email);
     expect(token).not.toBe(null);
 });

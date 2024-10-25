@@ -24,9 +24,6 @@ router.get('/', async (req, res) => {
 
 router.post("/add", auth.checkToken, async (req, res) => {
     const user = auth.getCurrentUser();
-    console.log(`we are in post add`);
-
-    console.log(`Current user is: ${user}`);
 
     try {
         const result = await documents.addOne(req.body, user);
@@ -42,7 +39,6 @@ router.post("/add", auth.checkToken, async (req, res) => {
 router.post("/update/doc", auth.checkToken, async (req, res) => {
     try {
         const user = auth.getCurrentUser();
-        console.log(`Current user is: ${user}`);
         const result = await documents.updateOne(req.body, user);
         return res.status(201).json({ success: true });
     } catch (error) {
@@ -61,10 +57,6 @@ router.post("/update/doc", auth.checkToken, async (req, res) => {
 router.post("/update/access", auth.checkToken, async (req, res) => {
     try {
         const user = auth.getCurrentUser();
-        console.log(`Current user is: ${user}`);
-        console.log(`Current document is: ${req.body}`);
-        console.log(`Current document is: ${req.body.newUser}`);
-
 
         const result = await documents.addAccess(req.body, user);
 
@@ -85,13 +77,16 @@ router.post("/update/access", auth.checkToken, async (req, res) => {
          Använd mailadressen du fått mailet till vid registrering.`,
         };
 
-        mg.messages().send(data, (error, body) => {
-        if (error) {
-            console.error('Error sending email:', error);
-        } else {
-            console.log('Email sent successfully:', body);
+        if (process.env.NODE_ENV !== 'test') {
+
+            mg.messages().send(data, (error, body) => {
+            if (error) {
+                console.error('Error sending email:', error);
+            } else {
+                console.log('Email sent successfully:', body);
+            }
+            })
         }
-        })
 
         return res.status(201).json({ success: true });
     } catch (error) {

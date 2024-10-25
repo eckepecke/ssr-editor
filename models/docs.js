@@ -190,8 +190,6 @@ const docs = {
     },
 
     appendCollabDocs: async function appendCollabDocs(ownerDocs, collabDocs) {
-        console.log("collabDocs:")
-        console.log(collabDocs);
         let db = await database.getDb(); 
 
         try {

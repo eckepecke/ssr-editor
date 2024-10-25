@@ -34,11 +34,8 @@ router.get('/all', async (req, res) => {
 
 router.get('/add', async (req, res) => {
     const user = auth.getCurrentUser();
-    console.log(`Current user is: ${user}`);
     try {
         const lastId = await documents.findHighestID(user);
-        console.log(lastId);
-
 
         return res.status(200).json({ lastId });
     } catch (error) {
@@ -49,8 +46,6 @@ router.get('/add', async (req, res) => {
 
 router.get('/:id', auth.checkToken, async (req, res) => {
     const user = auth.getCurrentUser();
-    console.log(`Current user is: ${user}`);
-    console.log(`ID: ${req.params.id}`);
 
     try {
 
