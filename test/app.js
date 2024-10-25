@@ -1,12 +1,17 @@
+process.env.NODE_ENV = 'test';
 const request = require('supertest');
-const { app, server } = require('../app.js'); // Import both app and server
+const { app, server } = require('../app.js');
 
 afterAll(async () => {
-    await server.close(); // Close the server after tests
+    console.log("closing server 1");
+    await server.close();
 });
 
-test('should return 200 and an object', async () => {
-    const res = await request(app).get('/test');
+test('testing that index reote returns instructions', async () => {
+    const res = await request(server).get('/');
+
     expect(res.statusCode).toBe(200);
     expect(res.body).toBeInstanceOf(Object);
+    expect(res.body).toHaveProperty('message');
+    expect(res.body).toHaveProperty('routes');
 });
