@@ -88,7 +88,6 @@ const docs = {
 
             const docToUpdate = docArray.find(doc => doc.id === idToFind);
             if (!docToUpdate) {
-                console.error(`Document with id ${idToFind} not found.`);
                 return { error: "Document not found" };
             }
 
@@ -144,7 +143,6 @@ const docs = {
             console.log(docArray)
             const docToUpdate = docArray.find(doc => doc.id === idToFind);
             if (!docToUpdate) {
-                console.error(`Document with id ${idToFind} not found.`);
                 return { error: "Document not found" };
             }
 
