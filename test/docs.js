@@ -127,7 +127,7 @@ test('Ensuring update works.', async () => {
     expect(res2.body.doc.created_at).toBeDefined;
 });
 
-test('Ensuring that new user is can access doc after being added', async () => {
+test('Ensuring that new user can access doc after being added', async () => {
     
     const updateBody = {
         id: id,
@@ -162,4 +162,57 @@ test('Ensuring that new user is can access doc after being added', async () => {
     expect(res3.body.data[0].allowed_users).toStrictEqual([testUser, collaborator]);
     expect(res3.body.data[0].is_code).toBe(false);
     expect(res3.body.data[0].created_at).toBeDefined;
+});
+
+test('Ensuring that adding access also adds doc to collaborators doc array', async () => {
+
+    await request(server)
+    .post('/auth/login')
+    .send({
+        email: collaborator,
+        password: "password"
+    });
+
+    const res = await request(server).get(`/get/all`);
+
+    expect(res.body.data[0].id).toBe(1);
+    expect(res.body.data[0].title).toBe("updated");
+    expect(res.body.data[0].content).toBe("updated content");
+    expect(res.body.data[0].allowed_users).toStrictEqual([testUser, collaborator]);
+    expect(res.body.data[0].is_code).toBe(false);
+});
+
+test('Ensuring that adding another doc appends the now doc', async () => {
+
+    await request(server)
+    .post('/auth/login')
+    .send({
+        email: testUser,
+        password: "password"
+    });
+
+    const testBody = {
+        id: 2,
+        title: "test2",
+        content: "test content2",
+        allowed_users: [testUser],
+        isCode: true,
+    };
+
+    await request(server)
+    .post('/post/add')
+    .send(testBody);
+
+    const res = await request(server).get(`/get/all`);
+
+    expect(res.body.data).toHaveLength(2);
+
+
+    expect(res.body.data[1].id).toBe(2);
+    expect(res.body.data[1].title).toBe("test2");
+    expect(res.body.data[1].content).toBe("test content2");
+    expect(res.body.data[1].allowed_users).toStrictEqual([testUser]);
+    expect(res.body.data[1].is_code).toBe(true);
+
+
 });

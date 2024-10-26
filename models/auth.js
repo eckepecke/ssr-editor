@@ -14,8 +14,16 @@ const auth = {
         return auth.user;
     },
 
+    setCurrentUser: function getCurrentUser(user) {
+        auth.user = user;
+    },
+
     getCurrentToken: function getCurrentToken() {
         return auth.token;
+    },
+
+    setCurrentToken: function getCurrentToken(token) {
+        auth.token = token;
     },
 
     login: async function(res, body) {
@@ -186,7 +194,7 @@ const auth = {
 
         const token = auth.token;
 
-        if (token === "") {
+        if (token === null) {
             return res.status(401).json({
                 errors: {
                     status: 401,
@@ -195,7 +203,7 @@ const auth = {
                     detail: "No token provided in request headers"
                 }
             });
-        } 
+        }
 
         jwt.verify(token, jwtSecret, function(err, decoded) {
             if (err) {

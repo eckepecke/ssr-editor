@@ -6,7 +6,7 @@ afterAll(async () => {
     await server.close();
 });
 
-test('testing that index reote returns instructions', async () => {
+test('testing that index route returns instructions', async () => {
     const res = await request(server).get('/');
 
     expect(res.statusCode).toBe(200);

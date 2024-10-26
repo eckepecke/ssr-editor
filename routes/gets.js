@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     return res.status(200).json({
         message: "These are all the current get routes",
+        routes: {
         allDocuments: {
             method: "GET",
             path: "/all",
@@ -16,11 +17,17 @@ router.get('/', async (req, res) => {
             method: "GET",
             path: "/:id",
             description: "Retrieve a document by its ID."
+        },
+        getLastIdForDocCreation: {
+            method: "GET",
+            path: "/add",
+            description: "Retrieve highest doc id in database."
         }
-    });
+        }
+    })
 });
 
-router.get('/all', async (req, res) => {
+router.get('/all', auth.checkToken, async (req, res) => {
     const user = auth.getCurrentUser();
 
     try {
@@ -32,8 +39,10 @@ router.get('/all', async (req, res) => {
     }
 });
 
-router.get('/add', async (req, res) => {
+router.get('/add', auth.checkToken, async (req, res) => {
+
     const user = auth.getCurrentUser();
+
     try {
         const lastId = await documents.findHighestID(user);
 

@@ -83,23 +83,25 @@ const docs = {
         const idToFind = parseInt(body.id)
 
         try {
-            const result = await db.collection.findOne({ email: user });
+            let result = await db.collection.findOne({ email: user });
             const docArray = result.docs;
 
             const docToUpdate = docArray.find(doc => doc.id === idToFind);
-
-            if (docToUpdate) {
-
-                docToUpdate.title = body.title;
-                docToUpdate.content = body.content;
-                docToUpdate.last_change = new Date();
-        
-                const result = await db.collection.updateOne(
-                    { email: user },
-                    { $set: { docs: docArray } }
-                );
+            if (!docToUpdate) {
+                console.error(`Document with id ${idToFind} not found.`);
+                return { error: "Document not found" };
             }
 
+            docToUpdate.title = body.title;
+            docToUpdate.content = body.content;
+            docToUpdate.last_change = new Date();
+    
+            result = await db.collection.updateOne(
+                { email: user },
+                { $set: { docs: docArray } }
+            );
+            
+            console.log(result);
             return result;
         } catch (e) {
             console.error(e);
@@ -125,7 +127,8 @@ const docs = {
 
             return highestId;
         } catch (err) {
-            throw new Error('Error finding max id: ' + err.message);
+            console.error('Error finding max id:', err);
+            return 0;
         } finally {
             await db.client.close();
         }
@@ -136,22 +139,23 @@ const docs = {
         const idToFind = parseInt(body.id)
 
         try {
-            const result = await db.collection.findOne({ email: user });
+            let result = await db.collection.findOne({ email: user });
             const docArray = result.docs;
             const docToUpdate = docArray.find(doc => doc.id === idToFind);
-
-            if (docToUpdate) {
-
-                docToUpdate.allowed_users.push(body.newUser);
-                docToUpdate.last_change = new Date();
-
-                const result = await db.collection.updateOne(
-                    { email: user },
-                    { $set: { docs: docArray } }
-                );
-
-                const response = await docs.addCollabMap(user, body.id, body.newUser);
+            if (!docToUpdate) {
+                console.error(`Document with id ${idToFind} not found.`);
+                return { error: "Document not found" };
             }
+
+            docToUpdate.allowed_users.push(body.newUser);
+            docToUpdate.last_change = new Date();
+
+                result = await db.collection.updateOne(
+                { email: user },
+                { $set: { docs: docArray } }
+            );
+
+            await docs.addCollabMap(user, body.id, body.newUser);
 
             return result;
         } catch (e) {

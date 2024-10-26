@@ -28,7 +28,6 @@ router.post("/add", auth.checkToken, async (req, res) => {
     try {
         const result = await documents.addOne(req.body, user);
 
-        console.log(result);
         return res.status(201).json({ success: true });
     } catch(e) {
         console.error(e)
@@ -40,10 +39,24 @@ router.post("/update/doc", auth.checkToken, async (req, res) => {
     try {
         const user = auth.getCurrentUser();
         const result = await documents.updateOne(req.body, user);
+
+        if (result?.error === "Document not found") {
+            return res.status(404).json({
+                success: false,
+                errors: {
+                    status: 404,
+                    source: req.path,
+                    title: "Document Not Found",
+                    detail: `Document with specified ID was not found.`
+                }
+            });
+        }
+
         return res.status(201).json({ success: true });
     } catch (error) {
         console.error(error);
         res.status(500).json({
+            success: false,
             errors: {
                 status: 500,
                 source: req.path,
@@ -53,6 +66,7 @@ router.post("/update/doc", auth.checkToken, async (req, res) => {
         });
     }
 });
+
 
 router.post("/update/access", auth.checkToken, async (req, res) => {
     try {

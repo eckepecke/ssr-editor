@@ -3,27 +3,22 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
     return res.status(200).json({
-        message: "These are all current routes",
+        message: "This is the index route. Contionue to sub index routes for more info.",
         routes: {
-            addDocument: {
-                method: "POST",
-                path: "/post/add",
-                description: "Add a new document."
-            },
-            updateDocument: {
-                method: "POST",
-                path: "post/update/:id",
-                description: "Update an existing document by its ID."
+            postRoutes: {
+                method: "GET",
+                path: "/post",
+                description: "Get info on /post routes."
             },
             allDocuments: {
                 method: "GET",
-                path: "get/all",
-                description: "Retrieve all documents."
+                path: "/get",
+                description: "Get info on /get routes."
             },
             getDocumentById: {
                 method: "GET",
-                path: "get/:id",
-                description: "Retrieve a document by its ID."
+                path: "/auths",
+                description: "Get info on /auth routes."
             }
         },
     });
