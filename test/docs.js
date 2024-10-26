@@ -11,8 +11,6 @@ const testUser = "docs@test.com"
 const collaborator = "collab@test.com"
 const id = 1;
 
-
-
 beforeAll(async () => {
     const res = await database.getDb();
 
@@ -63,7 +61,7 @@ test('After adding doc getAll should return the added doc', async () => {
         content: "test content",
         allowed_users: [testUser],
         isCode: false,
-      };
+    };
 
     const res1 = await request(server)
     .post('/post/add')
@@ -151,22 +149,24 @@ test('Ensuring that new user can access doc after being added', async () => {
 
     expect(res1.statusCode).toBe(201);
     expect(res1.body).toHaveProperty("success", true);
+    console.log(res2.body)
+    console.log(res2.body.doc)
+
 
     expect(res2.body.doc.allowed_users).toStrictEqual([testUser, collaborator]);
 
     expect(res3.statusCode).toBe(200);
     expect(res3.body).toBeInstanceOf(Object);
     console.log(res3.body);
-    expect(Array.isArray(res3.body.data)).toBe(true);
-    expect(res3.body.data.length).toBeGreaterThan(0);
+
     console.log(res3.body.data);
 
-    // expect(res3.body.data[0].id).toBe(1);
-    // expect(res3.body.data[0].title).toBe("updated");
-    // expect(res3.body.data[0].content).toBe("updated content");
-    // expect(res3.body.data[0].allowed_users).toStrictEqual([testUser, collaborator]);
-    // expect(res3.body.data[0].is_code).toBe(false);
-    // expect(res3.body.data[0].created_at).toBeDefined;
+    expect(res3.body.data[0].id).toBe(1);
+    expect(res3.body.data[0].title).toBe("updated");
+    expect(res3.body.data[0].content).toBe("updated content");
+    expect(res3.body.data[0].allowed_users).toStrictEqual([testUser, collaborator]);
+    expect(res3.body.data[0].is_code).toBe(false);
+    expect(res3.body.data[0].created_at).toBeDefined;
 });
 
 test('Ensuring that adding access also adds doc to collaborators doc array', async () => {

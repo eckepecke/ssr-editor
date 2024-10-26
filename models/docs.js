@@ -141,6 +141,7 @@ const docs = {
         try {
             let result = await db.collection.findOne({ email: user });
             const docArray = result.docs;
+            console.log(docArray)
             const docToUpdate = docArray.find(doc => doc.id === idToFind);
             if (!docToUpdate) {
                 console.error(`Document with id ${idToFind} not found.`);
