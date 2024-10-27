@@ -161,7 +161,6 @@ test('Ensuring that new user can access doc after being added', async () => {
     expect(res3.body).toBeInstanceOf(Object);
 
     console.log(auth.getCurrentUser());
-    console.log(res3);
     console.log(res3.body);
     console.log(res3.body.data);
 
@@ -183,6 +182,12 @@ test('Ensuring that adding access also adds doc to collaborators doc array', asy
     });
 
     const res = await request(server).get(`/get/all`);
+
+
+    console.log(auth.getCurrentUser());
+    console.log(res.body);
+    console.log(res.data);
+
 
     expect(res.body.data[0].id).toBe(1);
     expect(res.body.data[0].title).toBe("updated");
