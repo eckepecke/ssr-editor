@@ -20,7 +20,7 @@ const testBody = {
     isCode: false,
 };
 
-beforeEach(async () => {
+beforeAll(async () => {
     const res = await database.getDb();
 
     usersCollection = res.collection;
@@ -28,31 +28,45 @@ beforeEach(async () => {
 
     await usersCollection.deleteMany({});
 
-    await request(server)
+    const regResponse1 = await request(server)
     .post('/auth/register')
     .send({
         email: testUser,
         password: "password"
     });
 
-    await request(server)
+    console.log("RegREs1:", regResponse1.body)
+    const userCheck = await usersCollection.findOne({ email: testUser });
+    console.log("User in DB after registration:", userCheck);
+
+    const regResponse2 = await request(server)
     .post('/auth/register')
     .send({
         email: collaborator,
         password: "password"
     });
 
-    await request(server)
+    console.log("RegREs1:", regResponse2.body)
+
+    const loginResponse = await request(server)
     .post('/auth/login')
     .send({
         email: testUser,
         password: "password"
     });
 
-    await request(server)
-    .post('/post/add')
-    .send(testBody);
-}); 
+    console.log('Login Response:', loginResponse.body);
+
+});
+
+
+// beforeEach(async () => {
+
+
+
+
+
+// });
 
 afterAll(async () => {
     await db.client.close();
@@ -60,10 +74,17 @@ afterAll(async () => {
 });
 
 test('Initially getAll should return empty array', async () => {
-    await usersCollection.deleteMany({});
+
+    console.log(auth.getCurrentToken());
+    console.log(auth.getCurrentUser());
+
+    await request(server)
+    .post('/post/add')
+    .send(testBody);
+
 
     const res = await request(server).get('/get/all');
-
+    expect(res.statusCode).toBe(200);
     expect(res.body).toBeInstanceOf(Object);
     expect(res.body.data).toBeInstanceOf(Array);
     expect(res.body.data).toHaveLength(0);

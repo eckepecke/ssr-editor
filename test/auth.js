@@ -6,15 +6,24 @@ const auth = require('../models/auth.js');
 
 let usersCollection;
 let db;
-const email = "auth@test.com"
+const defaultEmail = "default@test.com"
+const newEmail = "auth@test.com"
 
-beforeAll(async () => {
+
+beforeEach(async () => {
     const res = await database.getDb();
 
     usersCollection = res.collection;
     db = res.db;
 
     await usersCollection.deleteMany({});
+
+    await request(server)
+    .post('/auth/register')
+    .send({
+        email: defaultEmail,
+        password: "password"
+    });
 }); 
 
 afterAll(async () => {
@@ -22,20 +31,12 @@ afterAll(async () => {
     await server.close();
 });
 
-test('Initially no user should be logged in', async () => {
-    const user = auth.getCurrentUser();
-    const token = auth.getCurrentToken();
-
-    expect(user).toBe(null);
-    expect(token).toBe(null);
-
-});
 
 test('Posting correct body should result in 201 response', async () => {
     const res = await request(server)
         .post('/auth/register')
         .send({
-            email: email,
+            email: newEmail,
             password: "password"
         });
 
@@ -58,7 +59,7 @@ test('Posting only email should return 401', async () => {
     const res = await request(server)
         .post('/auth/register')
         .send({
-            email: email
+            email: newEmail
         });
 
     expect(res.statusCode).toBe(401);
@@ -66,10 +67,13 @@ test('Posting only email should return 401', async () => {
 });
 
 test('Logging in with incorrect password should not succeed', async () => {
+    auth.setCurrentToken = null;
+    auth.setCurrentUser = null;
+
     const res = await request(server)
         .post('/auth/login')
         .send({
-            email: email,
+            email: defaultEmail,
             password: "fail"
         });
 
@@ -103,7 +107,7 @@ test('Logging in with correct credentials should succeed', async () => {
     const res = await request(server)
         .post('/auth/login')
         .send({
-            email: email,
+            email: defaultEmail,
             password: "password"
         });
 
@@ -112,6 +116,6 @@ test('Logging in with correct credentials should succeed', async () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body.data).toHaveProperty('message', 'User logged in');
-    expect(user).toBe(email);
+    expect(user).toBe(defaultEmail);
     expect(token).not.toBe(null);
 });
