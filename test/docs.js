@@ -157,8 +157,10 @@ test('Ensuring that new user can access doc after being added', async () => {
 
     expect(res3.statusCode).toBe(200);
     expect(res3.body).toBeInstanceOf(Object);
-    console.log(res3.body);
 
+    console.log(auth.getCurrentUser());
+    console.log(res3);
+    console.log(res3.body);
     console.log(res3.body.data);
 
     expect(res3.body.data[0].id).toBe(1);
