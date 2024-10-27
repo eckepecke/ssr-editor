@@ -3,6 +3,8 @@ const request = require('supertest');
 const { app, server } = require('../app.js');
 const database = require('../db/database.js');
 const docs = require('../models/docs.js');
+const auth = require('../models/auth.js');
+
 
 
 let usersCollection;
