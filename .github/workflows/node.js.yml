@@ -11,6 +11,7 @@ on:
 
 env:
   JWT_SECRET: "DUMMYSECRETFORTESTINGJWT12345678"
+  NODE_ENV: "test"
 
 jobs:
   build:
