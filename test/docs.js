@@ -12,8 +12,15 @@ let db;
 const testUser = "docs@test.com"
 const collaborator = "collab@test.com"
 const id = 1;
+const testBody = {
+    id: id,
+    title: "test",
+    content: "test content",
+    allowed_users: [testUser],
+    isCode: false,
+};
 
-beforeAll(async () => {
+beforeEach(async () => {
     const res = await database.getDb();
 
     usersCollection = res.collection;
@@ -41,6 +48,10 @@ beforeAll(async () => {
         email: testUser,
         password: "password"
     });
+
+    await request(server)
+    .post('/post/add')
+    .send(testBody);
 }); 
 
 afterAll(async () => {
@@ -49,6 +60,8 @@ afterAll(async () => {
 });
 
 test('Initially getAll should return empty array', async () => {
+    await usersCollection.deleteMany({});
+
     const res = await request(server).get('/get/all');
 
     expect(res.body).toBeInstanceOf(Object);
@@ -57,23 +70,20 @@ test('Initially getAll should return empty array', async () => {
 });
 
 test('After adding doc getAll should return the added doc', async () => {
-    const testBody = {
-        id: id,
-        title: "test",
-        content: "test content",
-        allowed_users: [testUser],
-        isCode: false,
-    };
+    await usersCollection.deleteMany({});
 
-    const res1 = await request(server)
+    const res = await request(server)
     .post('/post/add')
     .send(testBody);
 
 
+    expect(res.statusCode).toBe(201);
+});
+
+test('After adding doc getAll should return the added doc', async () => {
+
     const res2 = await request(server)
     .get('/get/all')
-
-    expect(res1.statusCode).toBe(201);
 
     expect(res2.body).toBeInstanceOf(Object);
     expect(res2.body.data[0]).toHaveProperty("id", id);
@@ -85,6 +95,7 @@ test('After adding doc getAll should return the added doc', async () => {
 });
 
 test('After adding doc get/:id should return doc with the given id', async () => {
+
     const res = await request(server).get(`/get/${id}`);
 
     expect(res.statusCode).toBe(200);
@@ -110,7 +121,6 @@ test('Ensuring update works.', async () => {
     .post(`/post/update/doc`)
     .send(updateBody);
 
-
     const res2 = await request(server).get(`/get/${id}`);
 
     expect(res1.statusCode).toBe(201);
@@ -128,7 +138,7 @@ test('Ensuring update works.', async () => {
 });
 
 test('Ensuring that new user can access doc after being added', async () => {
-    
+
     const updateBody = {
         id: id,
         newUser: collaborator,
@@ -165,14 +175,22 @@ test('Ensuring that new user can access doc after being added', async () => {
     console.log(res3.body.data);
 
     expect(res3.body.data[0].id).toBe(1);
-    expect(res3.body.data[0].title).toBe("updated");
-    expect(res3.body.data[0].content).toBe("updated content");
+    expect(res3.body.data[0].title).toBe("test");
+    expect(res3.body.data[0].content).toBe("test content");
     expect(res3.body.data[0].allowed_users).toStrictEqual([testUser, collaborator]);
     expect(res3.body.data[0].is_code).toBe(false);
     expect(res3.body.data[0].created_at).toBeDefined;
 });
 
 test('Ensuring that adding access also adds doc to collaborators doc array', async () => {
+    const updateBody = {
+        id: id,
+        newUser: collaborator,
+    };
+
+    const res1 = await request(server)
+    .post(`/post/update/access`)
+    .send(updateBody);
 
     await request(server)
     .post('/auth/login')
@@ -190,8 +208,8 @@ test('Ensuring that adding access also adds doc to collaborators doc array', asy
 
 
     expect(res.body.data[0].id).toBe(1);
-    expect(res.body.data[0].title).toBe("updated");
-    expect(res.body.data[0].content).toBe("updated content");
+    expect(res.body.data[0].title).toBe("test");
+    expect(res.body.data[0].content).toBe("test content");
     expect(res.body.data[0].allowed_users).toStrictEqual([testUser, collaborator]);
     expect(res.body.data[0].is_code).toBe(false);
 });
