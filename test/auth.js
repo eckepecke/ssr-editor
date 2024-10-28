@@ -26,7 +26,7 @@ beforeEach(async () => {
     });
 }); 
 
-afterAll(async () => {
+afterEach(async () => {
     await db.client.close();
     await server.close();
 });
@@ -43,6 +43,29 @@ test('Posting correct body should result in 201 response', async () => {
     expect(res.statusCode).toBe(201);
     expect(res.body.data).toHaveProperty('message', 'User successfully registered.');
 });
+
+test('Registering twice should fail.', async () => {
+    const res = await request(server)
+        .post('/auth/register')
+        .send({
+            email: newEmail,
+            password: "password"
+        });
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.data).toHaveProperty('message', 'User successfully registered.');
+
+    const res2 = await request(server)
+    .post('/auth/register')
+    .send({
+        email: newEmail,
+        password: "password"
+    });
+
+    expect(res2.statusCode).toBe(409);
+    expect(res2.body.errors).toHaveProperty('detail', 'A user with this email address already exists.');
+});
+
 
 test('Posting only password should return 401', async () => {
     const res = await request(server)
