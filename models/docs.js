@@ -3,9 +3,11 @@ const database = require("../db/database");
 const docs = {
     getAll: async function getAll(user) {
         let db = await database.getDb();
+        console.log("looking for: ", user);
 
         try {
             const result = await db.collection.findOne({ email: user });
+            console.log("result in getAll looking for user:", result)
 
             if (result && result.docs) {
                 let allDocs = result.docs;
@@ -29,6 +31,8 @@ const docs = {
 
     addOne: async function addOne(body, user) {
         const { collection, client } = await database.getDb();
+        console.log("body in addOne:", body);
+        console.log("user in addOne:", user);
 
         try {
             const result = await collection.updateOne(
@@ -46,6 +50,8 @@ const docs = {
                   }
                 }
               );
+              console.log("result in addOne:", result)
+
 
             return result;
         } catch (e) {
