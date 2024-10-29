@@ -119,3 +119,16 @@ li button {
 #editor {
     text-align: left;
 }
+
+input[type='text'],
+textarea {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+textarea {
+  height: 300px;
+  resize: vertical;
+}

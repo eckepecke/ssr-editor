@@ -108,8 +108,7 @@ const Documents = () => {
   return (
     <div>
       <h2>Documents</h2>
-      <AddDocument onAdd={handleAddDocument} />
-      {editingDocument && (
+      {editingDocument ? (
         <EditDocument
           document={editingDocument}
           onUpdate={handleUpdateDocument}
@@ -117,28 +116,34 @@ const Documents = () => {
           currentContent={currentDocumentContent}
           onContentChange={handleDocumentUpdate}
         />
-      )}
-      {editingAccess && (
-        <AddUser
-          document={editingAccess}
-          onUpdate={handleUpdateAccess}
-          onUpdateSuccess={handleUpdateSuccess}
-          onClose={closeAccessForm}
-        />
-      )}
-      {loadingText && <p>{loadingText}</p>}
-      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-      {documents.length === 0 ? (
-        <p>No documents available.</p>
       ) : (
-        <ul>
-          {documents.map((doc) => (
-          <Document key={doc.id} 
-          document={doc} 
-          onEdit={handleEditClick} 
-          onUpdateAccess={handleUpdateAccess} />
-            ))}
-        </ul>
+        <>
+          <AddDocument onAdd={handleAddDocument} />
+          {editingAccess && (
+            <AddUser
+              document={editingAccess}
+              onUpdate={handleUpdateAccess}
+              onUpdateSuccess={handleUpdateSuccess}
+              onClose={closeAccessForm}
+            />
+          )}
+          {loadingText && <p>{loadingText}</p>}
+          {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+          {documents.length === 0 ? (
+            <p>No documents available.</p>
+          ) : (
+            <ul>
+              {documents.map((doc) => (
+                <Document
+                  key={doc.id}
+                  document={doc}
+                  onEdit={handleEditClick}
+                  onUpdateAccess={handleUpdateAccess}
+                />
+              ))}
+            </ul>
+          )}
+        </>
       )}
     </div>
   );

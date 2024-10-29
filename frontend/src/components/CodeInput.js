@@ -5,7 +5,7 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/xml/xml';
 import 'codemirror/theme/dracula.css';
 
-const CodeInput = ({ setCodeContent }) => {
+const CodeInput = ({ setCodeContent, initialCode }) => {
     const editorRef = useRef(null);
     // const [code, setCode] = useState('');
     const [editorInstance, setEditorInstance] = useState(null);
@@ -43,6 +43,7 @@ const CodeInput = ({ setCodeContent }) => {
     useEffect(() => {
         if (editorRef.current && !editorInstance) {
             const cmInstance = CodeMirror(editorRef.current, {
+                value: initialCode || '',
                 mode: 'javascript',
                 lineNumbers: true,
                 theme: 'dracula',
