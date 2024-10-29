@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import CodeInput from './CodeInput';
 
+const SERVER_URL = process.env.REACT_APP_BACKEND_BASE_URL;
+
 
 /**
  * AddDocument Component
@@ -29,7 +31,7 @@ const AddDocument = ({ onAdd }) => {
 
 
 
-    const response = await fetch('/post/add', {
+    const response = await fetch(`${SERVER_URL}/post/add`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: newId, title, content, isCode }),

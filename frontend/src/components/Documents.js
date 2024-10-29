@@ -18,14 +18,14 @@ const Documents = () => {
   const [currentDocumentContent, setCurrentDocumentContent] = useState('');
   const [roomId, setRoomId] = useState(null);
 
-  const SERVER_URL = 'http://localhost:8080';
+  const SERVER_URL = process.env.REACT_APP_BACKEND_BASE_URL;
 
   /**
    * Fetches documents from the backend API.
    */
   const fetchDocuments = async () => {
     setLoadingText('Retrieving documents..')
-    const response = await fetch('/get/all');
+    const response = await fetch(`${SERVER_URL}/get/all`);
     const data = await response.json();
     setDocuments(data.data);
     setLoadingText('')

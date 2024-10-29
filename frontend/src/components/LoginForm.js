@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import AuthForm from './AuthForm';
 
+const SERVER_URL = process.env.REACT_APP_BACKEND_BASE_URL;
+
 
 const LoginForm = ({ onLoginSuccess, onTryingToRegister, successMessage }) => {
   const [email, setEmail] = useState('');
@@ -8,17 +10,15 @@ const LoginForm = ({ onLoginSuccess, onTryingToRegister, successMessage }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loadingText, setLoadingText] = useState('');
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
         setErrorMessage('')
         setLoadingText('Trying to login..');   
-
-      const response = await fetch('/auth/login', {
-        method: 'POST',
+        console.log(`${SERVER_URL}/auth/login`)
+        const response = await fetch(`${SERVER_URL}/auth/login`, {
+            method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },

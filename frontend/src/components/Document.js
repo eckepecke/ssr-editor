@@ -5,7 +5,6 @@ import React, { useState } from 'react';
  * Represents a single document with edit functionality.
  */
 const Document = ({ document, onEdit, onUpdateAccess}) => {
-    console.log('hej');
 
   /**
    * Initiates the editing process for the document.

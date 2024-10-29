@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import AuthForm from './AuthForm';
 
+const SERVER_URL = process.env.REACT_APP_BACKEND_BASE_URL;
+
 
 const RegisterForm = ({ onRegisterSuccess, onAlreadyHaveAccount }) => {
     const [email, setEmail] = useState('');
@@ -15,15 +17,15 @@ const RegisterForm = ({ onRegisterSuccess, onAlreadyHaveAccount }) => {
         setErrorMessage('');
         setLoadingText('Trying to register..');   
 
-        const response = await fetch('/auth/register', {
-          method: 'POST',
+        const response = await fetch(`${SERVER_URL}/auth/register`, {
+            method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ email, password }),
         });
 
-        setLoadingText('');   
+        setLoadingText('');
 
         if (response.ok) {
           const data = await response.json();

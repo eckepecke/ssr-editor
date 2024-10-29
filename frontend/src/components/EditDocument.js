@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+const SERVER_URL = process.env.REACT_APP_BACKEND_BASE_URL;
+
 /**
  * EditDocument Component
  * Renders a form to edit an existing document.
@@ -26,7 +28,7 @@ const EditDocument = ({ document, onUpdate, onClose, onContentChange, currentCon
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await fetch(`/post/update/${document.id}`, {
+    await fetch(`${SERVER_URL}/post/update/${document.id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: document.id, title, content }),

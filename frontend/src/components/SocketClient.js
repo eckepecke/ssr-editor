@@ -1,5 +1,6 @@
 import { io } from 'socket.io-client';
 
+const SERVER_URL = process.env.REACT_APP_BACKEND_BASE_URL;
 let socket;
 
 export const initializeSocket = (SERVER_URL, roomId, setCurrentDocumentContent) => {

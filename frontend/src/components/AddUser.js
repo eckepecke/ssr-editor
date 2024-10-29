@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+const SERVER_URL = process.env.REACT_APP_BACKEND_BASE_URL;
+
 /**
  * AddUser Component
  * Renders a form to edit an existing document.
@@ -20,7 +22,7 @@ const AddUser = ({ document, onUpdate, onClose, onUpdateSuccess }) => {
     setLoadingText('Updating access..'); 
     
     try {
-      const response = await fetch(`/post/update/access`, {
+      const response = await fetch(`${SERVER_URL}/post/update/access`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

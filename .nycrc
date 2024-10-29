@@ -1,6 +1,0 @@
-{
-  "reporter": ["html", "text", "clover"],
-  "all": true,
-  "include": ["src/**/*.js", "src/**/*.mjs"],
-  "exclude": ["tests/**/*.js", "tests/**/*.mjs"]
-}
