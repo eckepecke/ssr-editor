@@ -3,12 +3,23 @@ const { Server } = require("socket.io");
 const initializeSocket = (server) => {
     const io = new Server(server, {
         cors: {
-            origin: [
-                'http://localhost:3000', 
-                'https://jsramverk-eroo23.azurewebsites.net', 
-                'https://www.student.bth.se/~eroo23/editor'
-            ],
-            methods: ["GET", "POST"]
+            origin: (origin, callback) => {
+                const allowedOrigins = [
+                    'http://localhost:3000', 
+                    'https://jsramverk-eroo23.azurewebsites.net', 
+                    'https://www.student.bth.se/~eroo23/editor', 
+                    'https://www.student.bth.se/',
+                    'https://www.student.bth.se'
+                ];
+
+                if (allowedOrigins.includes(origin) || !origin) {
+                    callback(null, true);
+                } else {
+                    console.error('CORS error: Not allowed by CORS socket');
+                    callback(new Error('Not allowed by CORS socket'));
+                }
+            },
+            methods: ["GET", "POST", "OPTIONS"]
         }
     });
 

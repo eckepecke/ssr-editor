@@ -27,16 +27,23 @@ app.disable('x-powered-by');
 
 app.set("view engine", "ejs");
 
-app.use(cors());
-// app.use(cors({
-//     origin: [
-//         'https://www.student.bth.se/~eroo23/editor', 
-//         'https://localhost:3000',
-//         'https://jsramverk-eroo23.azurewebsites.net' // Add this line if needed
-//     ],
-//     methods: ['GET', 'POST'],
-//     credentials: true
-// }));
+
+const allowedOrigins = ['http://localhost:3000', 'https://jsramverk-eroo23.azurewebsites.net', 'https://www.student.bth.se/~eroo23/editor', 'https://www.student.bth.se', 'https://www.student.bth.se/'];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        console.log("Incoming origin:", origin); // Log the incoming origin
+
+        if (allowedOrigins.includes(origin) || !origin) {
+            console.log("Allowed!");
+            callback(null, true); // Allow the request
+        } else {
+            console.error("CORS Error: Origin not allowed:", origin); // Log the CORS error
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ["GET", "POST"]
+}));
 
 // don't show the log when it is test
 if (process.env.NODE_ENV !== 'test') {
@@ -46,7 +53,6 @@ if (process.env.NODE_ENV !== 'test') {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 app.use('/', index);
 app.use('/post', posts);
