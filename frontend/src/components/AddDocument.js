@@ -83,7 +83,7 @@ const AddDocument = ({ onAdd }) => {
                             placeholder="Enter document content..."
                         />
                     </div>
-                    <button type="button" onClick={() => setIsCodeMode(true)}>
+                    <button onClick={() => setIsCodeMode(true)}>
                         Enter Code Mode
                     </button>
                 </>

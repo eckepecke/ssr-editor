@@ -8,7 +8,7 @@ const AuthForm = ({ email, password, setEmail, setPassword, onSubmit, buttonText
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form class="auth-form" onSubmit={handleSubmit}>
       <label htmlFor="email">E-mail:</label>
       <input
         type="email"
@@ -29,7 +29,8 @@ const AuthForm = ({ email, password, setEmail, setPassword, onSubmit, buttonText
         required
       />
 
-      <input type="submit" value={buttonText} />
+
+     <button type="submit">{buttonText}</button>
     </form>
   );
 };

@@ -30,7 +30,7 @@ form div {
 
 label {
   display: block;
-  margin-bottom: 5px;
+  margin: 5px;
   font-weight: bold;
 }
 
@@ -39,6 +39,10 @@ input[type='text'] {
   padding: 8px;
   box-sizing: border-box;
 }
+
+
+
+
 
 button {
   padding: 8px 12px;
@@ -49,17 +53,27 @@ button {
   cursor: pointer;
 }
 
+button[type='submit'] {
+    margin: 8px;
+    width: 50%;
+    background-color: rgb(5, 172, 5);
+  }
+
+  button[type='submit']:hover {
+    background-color: #077e1b;
+  }
+
 button:hover {
   background-color: #0056b3;
 }
 
-button[type='button'] {
+/* button[type='button'] {
   background-color: #6c757d;
 }
 
 button[type='button']:hover {
   background-color: #5a6268;
-}
+} */
 
 ul {
   list-style-type: none;
@@ -131,4 +145,24 @@ textarea {
 textarea {
   height: 300px;
   resize: vertical;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+input[type='password'],
+[type="email"] {
+    margin: 8px;
+    padding: 8px;
+    box-sizing: border-box;
+    width: 50%;
 }
