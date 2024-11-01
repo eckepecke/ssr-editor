@@ -1,4 +1,5 @@
 const database = require("../db/database");
+const mailgun = require('mailgun-js');
 
 const docs = {
     getAll: async function getAll(user) {
@@ -195,7 +196,6 @@ const docs = {
     } finally {
         await db.client.close();
     }
-
     },
 
     appendCollabDocs: async function appendCollabDocs(ownerDocs, collabDocs) {
@@ -218,7 +218,31 @@ const docs = {
         } finally {
             await db.client.close();
         }
+    },
 
+    sendInvite: function sendInvite(user, body) {
+        const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY,
+        domain: process.env.MAILGUN_DOMAIN });
+
+        const data = {
+            from: user,
+            to: 'erikolofsson95@gmail.com',
+            // to: body.newUser,
+            subject: 'Hello',
+            text: `Du har blivit inbjuden av ${user}
+             att redigera dokumentet: ${body.title}.
+            Om du inte redan har en användare registrera dig på:
+            https://jsramverk-eroo23.azurewebsites.net
+             Använd mailadressen du fått mailet till vid registrering.`,
+        };
+
+        mg.messages().send(data, (error, body) => {
+        if (error) {
+            console.error('Error sending email:', error);
+        } else {
+            console.log('Email sent successfully:', body);
+        }
+        })
     }
 };
 

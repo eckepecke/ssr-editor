@@ -134,7 +134,6 @@ test('With no user logged in /post/update/doc should return 401', async () => {
     expect(res.body.errors).toHaveProperty("detail", "No token provided in request headers");
 });
 
-
 test('With no user logged in /post/update/access should return 401', async () => {
     auth.setCurrentUser(null);
     auth.setCurrentToken(null);

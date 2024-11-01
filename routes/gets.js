@@ -57,7 +57,6 @@ router.get('/:id', auth.checkToken, async (req, res) => {
     const user = auth.getCurrentUser();
 
     try {
-
         const doc = await documents.getOne(req.params.id, user);
 
         if (!doc || (Array.isArray(doc) && doc.length === 0)) {

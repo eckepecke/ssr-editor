@@ -67,39 +67,13 @@ router.post("/update/doc", auth.checkToken, async (req, res) => {
     }
 });
 
-
 router.post("/update/access", auth.checkToken, async (req, res) => {
     try {
         const user = auth.getCurrentUser();
-
         const result = await documents.addAccess(req.body, user);
 
-        const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY,
-            domain: process.env.MAILGUN_DOMAIN });
-
-        const data = {
-        from: user,
-        // I can only send emails to my verified email
-        // with my current domain
-        // to: 'erikolofsson95@gmail.com',
-        to: req.body.newUser,
-        subject: 'Hello',
-        text: `Du har blivit inbjuden av ${user}
-         att redigera dokumentet: ${req.body.title}.
-        Om du inte redan har en användare registrera dig på:
-        https://jsramverk-eroo23.azurewebsites.net
-         Använd mailadressen du fått mailet till vid registrering.`,
-        };
-
         if (process.env.NODE_ENV !== 'test') {
-
-            mg.messages().send(data, (error, body) => {
-            if (error) {
-                console.error('Error sending email:', error);
-            } else {
-                console.log('Email sent successfully:', body);
-            }
-            })
+            documents.sendInvite(user, req.body);
         }
 
         return res.status(201).json({ success: true });
