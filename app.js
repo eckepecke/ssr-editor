@@ -28,7 +28,7 @@ app.disable('x-powered-by');
 app.set("view engine", "ejs");
 
 
-const allowedOrigins = ['http://localhost:3000', 'https://jsramverk-eroo23.azurewebsites.net', 'https://www.student.bth.se/~eroo23/editor', 'https://www.student.bth.se', 'https://www.student.bth.se/'];
+const allowedOrigins = ['http://localhost:3000', 'https://www.student.bth.se/~eroo23/editor', 'https://www.student.bth.se', 'https://www.student.bth.se/'];
 
 app.use(cors({
     origin: function (origin, callback) {

@@ -38,6 +38,7 @@ router.post("/add", auth.checkToken, async (req, res) => {
 router.post("/update/doc", auth.checkToken, async (req, res) => {
     try {
         const user = auth.getCurrentUser();
+        console.log("hej")
         const result = await documents.updateOne(req.body, user);
 
         if (result?.error === "Document not found") {
@@ -70,13 +71,13 @@ router.post("/update/doc", auth.checkToken, async (req, res) => {
 router.post("/update/access", auth.checkToken, async (req, res) => {
     try {
         const user = auth.getCurrentUser();
-        const result = await documents.addAccess(req.body, user);
+        const result = await documents.addAccess(req.body, user); // renamed `res` to `result`
 
         if (process.env.NODE_ENV !== 'test') {
             documents.sendInvite(user, req.body);
         }
 
-        return res.status(201).json({ success: true });
+        return res.status(201).json({ success: true }); // This now correctly references the Express response object
     } catch (error) {
         console.error(error);
         res.status(500).json({

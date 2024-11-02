@@ -91,22 +91,35 @@ const docs = {
 
         try {
             let result = await db.collection.findOne({ email: user });
-            const docArray = result.docs;
+            let docArray = result.docs;
+            const collabDocArray = result.collabDocs;
 
-            const docToUpdate = docArray.find(doc => doc.id === idToFind);
+            console.log("collabDocArray", collabDocArray)
+
+
+            let docToUpdate = docArray.find(doc => doc.id === idToFind);
             if (!docToUpdate) {
-                return { error: "Document not found" };
+                console.log("idToFind:", idToFind, "Type:", typeof idToFind);
+                const collabDocToUpdate = collabDocArray.find(doc => doc.docId === Number(idToFind));
+                console.log("collabDocToUpdate:", collabDocToUpdate);
+
+                const owner = collabDocToUpdate.owner;
+                result = await db.collection.findOne({ email: owner });
+                docArray = result.docs;
+                docToUpdate = docArray.find(doc => doc.id === idToFind);
+                user = owner;
+                // return { error: "Document not found" };
             }
 
             docToUpdate.title = body.title;
             docToUpdate.content = body.content;
             docToUpdate.last_change = new Date();
-    
+
             result = await db.collection.updateOne(
                 { email: user },
                 { $set: { docs: docArray } }
             );
-            
+
             console.log(result);
             return result;
         } catch (e) {
@@ -146,6 +159,7 @@ const docs = {
 
         try {
             let result = await db.collection.findOne({ email: user });
+            console.log(result);
             const docArray = result.docs;
             console.log(docArray)
             const docToUpdate = docArray.find(doc => doc.id === idToFind);
@@ -160,6 +174,8 @@ const docs = {
                 { email: user },
                 { $set: { docs: docArray } }
             );
+            console.log(result);
+
 
             await docs.addCollabMap(user, body.id, body.newUser);
 
@@ -219,6 +235,34 @@ const docs = {
             await db.client.close();
         }
     },
+
+    // findCollabDoc: async function findCollabDoc(body, collabDocArray) {
+    //     // const owner = collabDoc.owner
+    //     // console.log(owner);
+    //     console.log(body);
+    //     const idToFind = body.id
+    //     const collabDocToUpdate = collabDocArray.find(doc => doc.id === idToFind);
+    //     const owner = collabDocToUpdate.owner;
+
+
+    //     let result = await db.collection.findOne({ email: owner });
+
+    //     const ownerDocArray = result.docs;
+    //     console.log("ownerDocArray", ownerDocArray)
+    //     const docToUpdate = docArray.find(doc => doc.id === idToFind);
+
+    //     docToUpdate.title = body.title;
+    //     docToUpdate.content = body.content;
+    //     docToUpdate.last_change = new Date();
+
+    //     result = await db.collection.updateOne(
+    //         { email: owner },
+    //         { $set: { docs: docArray } }
+    //     );
+
+    //     console.log(result);
+
+    // },
 
     sendInvite: function sendInvite(user, body) {
         const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY,

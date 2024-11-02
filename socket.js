@@ -6,7 +6,6 @@ const initializeSocket = (server) => {
             origin: (origin, callback) => {
                 const allowedOrigins = [
                     'http://localhost:3000', 
-                    'https://jsramverk-eroo23.azurewebsites.net', 
                     'https://www.student.bth.se/~eroo23/editor', 
                     'https://www.student.bth.se/',
                     'https://www.student.bth.se'

@@ -35,7 +35,7 @@ const EditDocument = ({ document, onUpdate, onClose, onContentChange, currentCon
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await fetch(`${SERVER_URL}/post/update/${document.id}`, {
+    await fetch(`${SERVER_URL}/post/update/doc`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: document.id, title, content }),
