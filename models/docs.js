@@ -4,11 +4,9 @@ const mailgun = require('mailgun-js');
 const docs = {
     getAll: async function getAll(user) {
         let db = await database.getDb();
-        console.log("looking for: ", user);
 
         try {
             const result = await db.collection.findOne({ email: user });
-            console.log("result in getAll looking for user:", result)
 
             if (result && result.docs) {
                 let allDocs = result.docs;
@@ -32,8 +30,6 @@ const docs = {
 
     addOne: async function addOne(body, user) {
         const { collection, client } = await database.getDb();
-        console.log("body in addOne:", body);
-        console.log("user in addOne:", user);
 
         try {
             const result = await collection.updateOne(
@@ -51,8 +47,6 @@ const docs = {
                   }
                 }
               );
-              console.log("result in addOne:", result)
-
 
             return result;
         } catch (e) {
@@ -94,18 +88,12 @@ const docs = {
             let docArray = result.docs;
             const collabDocArray = result.collabDocs;
 
-            console.log("collabDocArray", collabDocArray)
-
-
             let docToUpdate = docArray.find(doc => doc.id === idToFind);
             if (!docToUpdate) {
-                console.log("idToFind:", idToFind, "Type:", typeof idToFind);
                 const collabDocToUpdate = collabDocArray.find(doc => doc.docId === Number(idToFind));
                 if (!collabDocToUpdate) {
                     return { status: 404, error: "Document not found" };
                 }
-
-                console.log("collabDocToUpdate:", collabDocToUpdate);
 
                 const owner = collabDocToUpdate.owner;
                 result = await db.collection.findOne({ email: owner });
@@ -125,7 +113,6 @@ const docs = {
                 { $set: { docs: docArray } }
             );
 
-            console.log(result);
             return result;
         } catch (e) {
             console.error(e);
@@ -164,9 +151,7 @@ const docs = {
 
         try {
             let result = await db.collection.findOne({ email: user });
-            console.log(result);
             const docArray = result.docs;
-            console.log(docArray)
             const docToUpdate = docArray.find(doc => doc.id === idToFind);
             if (!docToUpdate) {
                 return { status: 404, error: "Document not found" };
@@ -179,8 +164,6 @@ const docs = {
                 { email: user },
                 { $set: { docs: docArray } }
             );
-            console.log("Result afetr update", result);
-
 
             await docs.addCollabMap(user, body.id, body.newUser);
 
@@ -260,8 +243,6 @@ const docs = {
         mg.messages().send(data, (error, body) => {
         if (error) {
             console.error('Error sending email:', error);
-        } else {
-            console.log('Email sent successfully:', body);
         }
         })
     }

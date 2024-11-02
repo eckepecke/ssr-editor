@@ -37,7 +37,6 @@ const AddUser = ({ document, onUpdate, onClose, onUpdateSuccess }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('add successful wihoo:', data);
 
         onUpdate(newUser);
         onUpdateSuccess(`User ${newUser} can now edit the document.`)

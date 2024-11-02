@@ -38,7 +38,6 @@ router.post("/add", auth.checkToken, async (req, res) => {
 router.post("/update/doc", auth.checkToken, async (req, res) => {
     try {
         const user = auth.getCurrentUser();
-        console.log("hej")
         const result = await documents.updateOne(req.body, user);
 
         if (result.status === 404) {

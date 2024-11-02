@@ -87,7 +87,6 @@ test('/post/update/doc should return 201 with correct body', async () => {
 
 test('/post/update/doc should return 404 with incorrect body', async () => {
 
-    console.log("time for error");
     const res = await request(server).post('/post/update/doc').send(errorBody);
 
     expect(res.statusCode).toBe(404);
@@ -97,7 +96,6 @@ test('/post/update/doc should return 404 with incorrect body', async () => {
 test('/post/update/access should return 201 with correct body', async () => {
     testBody.newUser = "test";
 
-    console.log("time for error");
     const res = await request(server).post('/post/update/doc').send(testBody);
 
     expect(res.statusCode).toBe(201);
@@ -107,7 +105,6 @@ test('/post/update/access should return 201 with correct body', async () => {
 test('/post/update/access should return 404 with incorrect body', async () => {
     errorBody.newUser = "test";
 
-    console.log("time for error");
     const res = await request(server).post('/post/update/access').send(errorBody);
 
     expect(res.statusCode).toBe(404);

@@ -29,12 +29,10 @@ const RegisterForm = ({ onRegisterSuccess, onAlreadyHaveAccount }) => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log('Registration successful:', data);
   
           onRegisterSuccess(data.data.message);
         } else {
           const errorData = await response.json();
-          console.log(errorData.errors.detail);
           setErrorMessage(errorData.errors.detail || 'Registration failed. Please try again.');
         }
       } catch (error) {

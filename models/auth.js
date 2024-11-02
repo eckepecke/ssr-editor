@@ -30,8 +30,6 @@ const auth = {
         const email = body.email;
         const password = body.password;
 
-        console.log(body);
-
         if (!email || !password) {
             return res.status(401).json({
                 errors: {

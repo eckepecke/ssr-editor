@@ -16,7 +16,6 @@ const LoginForm = ({ onLoginSuccess, onTryingToRegister, successMessage }) => {
     try {
         setErrorMessage('')
         setLoadingText('Trying to login..');   
-        console.log(`${SERVER_URL}/auth/login`)
         const response = await fetch(`${SERVER_URL}/auth/login`, {
             method: 'POST',
         headers: {
@@ -28,8 +27,6 @@ const LoginForm = ({ onLoginSuccess, onTryingToRegister, successMessage }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Login successful wihoo:', data);
-
         onLoginSuccess();
       } else {
         const errorData = await response.json();

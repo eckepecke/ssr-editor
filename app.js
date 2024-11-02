@@ -32,13 +32,11 @@ const allowedOrigins = ['http://localhost:3000', 'https://www.student.bth.se/~er
 
 app.use(cors({
     origin: function (origin, callback) {
-        console.log("Incoming origin:", origin); // Log the incoming origin
 
         if (allowedOrigins.includes(origin) || !origin) {
-            console.log("Allowed!");
-            callback(null, true); // Allow the request
+            callback(null, true);
         } else {
-            console.error("CORS Error: Origin not allowed:", origin); // Log the CORS error
+            console.error("CORS Error: Origin not allowed:", origin);
             callback(new Error('Not allowed by CORS'));
         }
     },
@@ -63,7 +61,6 @@ app.use(express.static(path.join(process.cwd(), 'frontend', 'build')));
 
 
 app.use((req,res, next) => {
-    console.log("Epic fail");
     var err = new Error("Not found");
     err.status = 404;
     next(err);
