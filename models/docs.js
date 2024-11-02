@@ -101,6 +101,10 @@ const docs = {
             if (!docToUpdate) {
                 console.log("idToFind:", idToFind, "Type:", typeof idToFind);
                 const collabDocToUpdate = collabDocArray.find(doc => doc.docId === Number(idToFind));
+                if (!collabDocToUpdate) {
+                    return { status: 404, error: "Document not found" };
+                }
+
                 console.log("collabDocToUpdate:", collabDocToUpdate);
 
                 const owner = collabDocToUpdate.owner;
@@ -108,8 +112,9 @@ const docs = {
                 docArray = result.docs;
                 docToUpdate = docArray.find(doc => doc.id === idToFind);
                 user = owner;
-                // return { error: "Document not found" };
             }
+
+
 
             docToUpdate.title = body.title;
             docToUpdate.content = body.content;
@@ -164,17 +169,17 @@ const docs = {
             console.log(docArray)
             const docToUpdate = docArray.find(doc => doc.id === idToFind);
             if (!docToUpdate) {
-                return { error: "Document not found" };
+                return { status: 404, error: "Document not found" };
             }
 
             docToUpdate.allowed_users.push(body.newUser);
             docToUpdate.last_change = new Date();
 
-                result = await db.collection.updateOne(
+            result = await db.collection.updateOne(
                 { email: user },
                 { $set: { docs: docArray } }
             );
-            console.log(result);
+            console.log("Result afetr update", result);
 
 
             await docs.addCollabMap(user, body.id, body.newUser);
@@ -235,34 +240,6 @@ const docs = {
             await db.client.close();
         }
     },
-
-    // findCollabDoc: async function findCollabDoc(body, collabDocArray) {
-    //     // const owner = collabDoc.owner
-    //     // console.log(owner);
-    //     console.log(body);
-    //     const idToFind = body.id
-    //     const collabDocToUpdate = collabDocArray.find(doc => doc.id === idToFind);
-    //     const owner = collabDocToUpdate.owner;
-
-
-    //     let result = await db.collection.findOne({ email: owner });
-
-    //     const ownerDocArray = result.docs;
-    //     console.log("ownerDocArray", ownerDocArray)
-    //     const docToUpdate = docArray.find(doc => doc.id === idToFind);
-
-    //     docToUpdate.title = body.title;
-    //     docToUpdate.content = body.content;
-    //     docToUpdate.last_change = new Date();
-
-    //     result = await db.collection.updateOne(
-    //         { email: owner },
-    //         { $set: { docs: docArray } }
-    //     );
-
-    //     console.log(result);
-
-    // },
 
     sendInvite: function sendInvite(user, body) {
         const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY,

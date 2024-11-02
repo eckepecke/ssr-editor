@@ -108,7 +108,7 @@ test('/post/update/access should return 404 with incorrect body', async () => {
     errorBody.newUser = "test";
 
     console.log("time for error");
-    const res = await request(server).post('/post/update/doc').send(errorBody);
+    const res = await request(server).post('/post/update/access').send(errorBody);
 
     expect(res.statusCode).toBe(404);
     expect(res.body).toHaveProperty("success", false);

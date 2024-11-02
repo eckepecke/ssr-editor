@@ -41,16 +41,8 @@ router.post("/update/doc", auth.checkToken, async (req, res) => {
         console.log("hej")
         const result = await documents.updateOne(req.body, user);
 
-        if (result?.error === "Document not found") {
-            return res.status(404).json({
-                success: false,
-                errors: {
-                    status: 404,
-                    source: req.path,
-                    title: "Document Not Found",
-                    detail: `Document with specified ID was not found.`
-                }
-            });
+        if (result.status === 404) {
+            return res.status(404).json({ success: false, error: result.error });
         }
 
         return res.status(201).json({ success: true });
@@ -71,13 +63,16 @@ router.post("/update/doc", auth.checkToken, async (req, res) => {
 router.post("/update/access", auth.checkToken, async (req, res) => {
     try {
         const user = auth.getCurrentUser();
-        const result = await documents.addAccess(req.body, user); // renamed `res` to `result`
+        const result = await documents.addAccess(req.body, user);
+        if (result.status === 404) {
+            return res.status(404).json({ success: false, error: result.error });
+        }
 
         if (process.env.NODE_ENV !== 'test') {
             documents.sendInvite(user, req.body);
         }
 
-        return res.status(201).json({ success: true }); // This now correctly references the Express response object
+        return res.status(201).json({ success: true });
     } catch (error) {
         console.error(error);
         res.status(500).json({
